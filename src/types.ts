@@ -1,3 +1,7 @@
-export type CardType = {
-  products:{}
+export type TopNavTypes = {
+  products: [];
+    categories: [];
+    category: string;
+    currencies:[];
+    currency:string
 };

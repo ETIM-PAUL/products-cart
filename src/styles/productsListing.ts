@@ -1,47 +1,36 @@
 import styled from "styled-components"
 
 export const FirstContainer = styled.div`
-  // display: inline-flex;
   margin-top: -22px;
   background-color: #fff;
   width: 100%;
   height: 100vh;
   font-family: serif
-`
-
-export const SecondContainer = styled.div`
-  margin-top: -22px;
-  background-color: #fff;
-  width: 100%;
-  height: 100vh;
-  font-family: serif
-
-
-`
-
-export const ThirdContainer = styled.div`
-  margin-top: -22px;
-  background-color: #fff;
-  width: 100%;
-  height: 100vh;
-  font-family: serif
-
-
 `
 export const Heading = styled.div`
   color: #000;
   font-size: 25px;
   padding: 3rem 2.5rem;
 `
-export const CardWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 300px;
-  grid-template-rows: 210px 210px 80px;
-  grid-template-areas: "image" "text" "stats";
-  border-radius: 18px;
-  background: #000;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
-  text-align: center;
+export const CardsDiv = styled.div`
+
+`;
+
+export const CardsContainer = styled.div`
+display: flex;
+width: 90%;
+margin: auto;
+gap: 20px;
+flex-wrap: wrap;
+justify-content: center;
+`;
+
+export const Card = styled.div`
+flex: 0 1 calc(25% - 1em);
+&:hover{
+box-shadow: 5px 5px 5px 5px #1410100d;
+
+}
 `;
 
 export const CardImage = styled.div<{ background: string }>`
@@ -52,6 +41,24 @@ export const CardImage = styled.div<{ background: string }>`
   background-size: cover;
 `;
 
+export const WaterMark = styled.span`
+// position: relative;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+z-index: -1;
+
+color: gainsboro;
+font-size: 20px;
+font-weight: 50px;
+display: flex;
+justify-content: center;
+align-content: center;
+opacity: 2.0;
+font-variant-caps: all-small-caps;
+
+`
 export const CardTextWrapper = styled.div`
   grid-area: text;
   margin: 25px;

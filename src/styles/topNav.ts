@@ -8,7 +8,7 @@ export const TopHeading = styled.div`
   font-variant-caps: all-small-caps;
 `
 
-export const Item = styled.p`
+export const Item = styled.a`
   font-size: 15px;
   color: black;
   &:hover{
@@ -22,7 +22,7 @@ export const Item = styled.p`
   padding: 0 10px;
   `
   
-  export const Menu = styled.p`
+  export const Menu = styled.div`
   display: inline-flex;
 `
 

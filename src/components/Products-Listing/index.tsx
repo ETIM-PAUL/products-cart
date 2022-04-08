@@ -1,48 +1,40 @@
 import React from "react";
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql,
-} from "@apollo/client";
-import { CardType } from "../../types";
-
+import { useQuery, gql } from "@apollo/client";
 import {
   FirstContainer,
   Heading,
-  CardWrapper,
-  CardTextWrapper,
-  CardTextDate,
-  CardTextTitle,
-  CardTextBody,
-  SecondContainer,
-  ThirdContainer,
+  CardsContainer,
+  Card,
+  WaterMark,
 } from "../../styles/productsListing";
-import Tilt from "react-parallax-tilt";
+import { connect } from "react-redux";
+import { client } from "../../App";
 
 class ProductsListing extends React.Component<
-  {},
-  { showWomen: boolean; products: []; showMen: boolean; showChildren: boolean }
+  { category: string; currency: string },
+  { products: []; category: string; num: number }
 > {
   constructor(props: any) {
     super(props);
     this.state = {
       products: [],
-      showWomen: true,
-      showMen: true,
-      showChildren: true,
+      category: this.props.category,
+      num: 0,
     };
-    const client = new ApolloClient({
-      uri: "http://localhost:4000/",
-      cache: new InMemoryCache(),
-    });
-
-    client
-      .query({
-        query: gql`
-          query categories {
-            categories {
+  }
+  componentDidMount() {
+    console.log(this.props.currency);
+  }
+  componentDidUpdate(prevState: any) {
+    let category = this.props.category;
+    let currency = this.props.currency;
+    if (prevState.category !== category || prevState.currency !== currency) {
+      client
+        .query({
+          query: gql`
+          query category {
+            category(input: { title: "${category}" }) {
+              name
               products {
                 id
                 name
@@ -51,54 +43,98 @@ class ProductsListing extends React.Component<
                 description
                 category
                 brand
+                attributes {
+                  id
+                  name
+                  type
+                  items {
+                    displayValue
+                    value
+                    id
+                  }
+                }
+                prices {
+                  currency {
+                    label
+                    symbol
+                  }
+                  amount
+                }
               }
             }
           }
         `,
-      })
-      .then((result) =>
-        // this.setState({ products: result.data.categories })
-        console.log(result)
-      );
-  }
-  componentDidMount() {
-    // getData()
+        })
+        .then((result) =>
+          this.setState({ products: result.data.category.products })
+        );
+      if (this.props.currency?.includes("USD")) {
+        this.setState({ num: 0 });
+      }
+      if (this.props.currency?.includes("GBP")) {
+        this.setState({ num: 1 });
+      }
+      if (this.props.currency?.includes("AUD")) {
+        this.setState({ num: 2 });
+      }
+      if (this.props.currency?.includes("JPY")) {
+        this.setState({ num: 3 });
+      }
+      if (this.props.currency?.includes("RUB")) {
+        this.setState({ num: 4 });
+      }
+      console.log(category);
+    }
+    console.log(this.state.num);
   }
 
   render() {
+    let numm = this.state.num;
     return (
       <>
-        {this.state.showWomen && (
-          <FirstContainer>
-            <Heading>All Categories</Heading>
-            <div
-              style={{
-                // marginTop: "15px",
-                margin: "auto",
-                width: "90%",
-                display: "grid",
-                gap: "40px",
-                marginBottom: "10px",
-                gridTemplateColumns: "auto auto auto auto",
-              }}
-            >
-              {this.state.numbers.map((x) => (
-                <div>
-                  <div>
-                    <img src={"https://picsum.photos/250/280"} alt="pic"></img>
-                  </div>
-                  <div style={{ color: " #80808091", paddingTop: "15px" }}>
-                    Apollo Running Short
-                  </div>
-                  <div style={{ paddingTop: "5px" }}>$50.00</div>
-                </div>
-              ))}
-            </div>
-          </FirstContainer>
-        )}
+        <FirstContainer>
+          <Heading>All Categories</Heading>
+          <CardsContainer>
+            {this.state.products.length >= 0 &&
+              this.state.products.map(
+                (x: {
+                  name: string;
+                  prices: any;
+                  gallery: ["strings"];
+                  inStock: boolean;
+                }) => (
+                  <Card key={x.name}>
+                    {x.inStock === false && <WaterMark>Out of stock</WaterMark>}
+                    <img
+                      src={x.gallery[0]}
+                      height={250}
+                      width={250}
+                      alt="pic"
+                    />
+
+                    <div style={{ color: " #80808091", paddingTop: "15px" }}>
+                      {x.name}
+                    </div>
+                    <div style={{ paddingTop: "5px" }}>
+                      {x.prices[numm].currency.symbol}
+                      {x.prices[numm].amount}
+                      <br />
+                    </div>
+                  </Card>
+                )
+              )}
+          </CardsContainer>
+        </FirstContainer>
       </>
     );
   }
 }
 
-export default ProductsListing;
+function mapDispatchToProps(state: any) {
+  return {
+    category: state.action["selectedCategory"],
+    currency: state.action["selectedCurrency"],
+  };
+}
+
+export default connect(mapDispatchToProps, null)(ProductsListing);
