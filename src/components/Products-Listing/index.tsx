@@ -1,73 +1,129 @@
 import React from "react";
-import { useQuery, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
 import {
   FirstContainer,
   Heading,
   CardsContainer,
   Card,
   WaterMark,
+  CardTitle,
+  Cart,
+  Banner,
 } from "../../styles/productsListing";
 import { connect } from "react-redux";
 import { client } from "../../App";
+import { CardPropsTypes } from "../../types";
+import { BsCart } from "react-icons/bs";
+import { Link } from "react-router-dom";
+// import { mapDispatchToProps } from "../../redux/redux-functions";
 
 class ProductsListing extends React.Component<
-  { category: string; currency: string },
-  { products: []; category: string; num: number }
+  { category: string; currency: any },
+  { products: []; num: number }
 > {
   constructor(props: any) {
     super(props);
     this.state = {
       products: [],
-      category: this.props.category,
       num: 0,
     };
   }
   componentDidMount() {
-    console.log(this.props.currency);
-  }
-  componentDidUpdate(prevState: any) {
     let category = this.props.category;
-    let currency = this.props.currency;
-    if (prevState.category !== category || prevState.currency !== currency) {
+    try {
       client
         .query({
           query: gql`
-          query category {
-            category(input: { title: "${category}" }) {
-              name
-              products {
-                id
+            query category {
+              category(input: { title: "${category}" }) {
                 name
-                inStock
-                gallery
-                description
-                category
-                brand
-                attributes {
+                products {
                   id
                   name
-                  type
-                  items {
-                    displayValue
-                    value
+                  inStock
+                  gallery
+                  description
+                  category
+                  brand
+                  attributes {
                     id
+                    name
+                    type
+                    items {
+                      displayValue
+                      value
+                      id
+                    }
                   }
-                }
-                prices {
-                  currency {
-                    label
-                    symbol
+                  prices {
+                    currency {
+                      label
+                      symbol
+                    }
+                    amount
                   }
-                  amount
                 }
               }
             }
-          }
-        `,
+          `,
         })
-        .then((result) =>
-          this.setState({ products: result.data.category.products })
-        );
+        .then((result) => {
+          this.setState({
+            products: result.data.category?.products,
+          });
+          console.log(result.data.category?.products);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  componentDidUpdate(prevState: any) {
+    let currency = this.props.currency;
+    let category = this.props.category;
+    if (prevState.category !== category && prevState.currency !== currency) {
+      client
+        .query({
+          query: gql`
+            query category {
+              category(input: { title: "${category}" }) {
+                name
+                products {
+                  id
+                  name
+                  inStock
+                  gallery
+                  description
+                  category
+                  brand
+                  attributes {
+                    id
+                    name
+                    type
+                    items {
+                      displayValue
+                      value
+                      id
+                    }
+                  }
+                  prices {
+                    currency {
+                      label
+                      symbol
+                    }
+                    amount
+                  }
+                }
+              }
+            }
+          `,
+        })
+        .then((result) => {
+          this.setState({
+            products: result.data.category.products,
+          });
+          console.log(result.data.category);
+        });
       if (this.props.currency?.includes("USD")) {
         this.setState({ num: 0 });
       }
@@ -83,9 +139,7 @@ class ProductsListing extends React.Component<
       if (this.props.currency?.includes("RUB")) {
         this.setState({ num: 4 });
       }
-      console.log(category);
     }
-    console.log(this.state.num);
   }
 
   render() {
@@ -95,34 +149,33 @@ class ProductsListing extends React.Component<
         <FirstContainer>
           <Heading>All Categories</Heading>
           <CardsContainer>
-            {this.state.products.length >= 0 &&
-              this.state.products.map(
-                (x: {
-                  name: string;
-                  prices: any;
-                  gallery: ["strings"];
-                  inStock: boolean;
-                }) => (
-                  <Card key={x.name}>
-                    {x.inStock === false && <WaterMark>Out of stock</WaterMark>}
+            {this.state.products?.length >= 0 &&
+              this.state.products.map((x: CardPropsTypes) => (
+                <Card key={x.name}>
+                  <Banner>
                     <img
                       src={x.gallery[0]}
                       height={250}
                       width={250}
-                      alt="pic"
+                      alt="Product Img"
+                      style={{ margin: "auto" }}
                     />
+                    {x.inStock === false && <WaterMark>Out of stock</WaterMark>}
+                    <Link to={`/product/${x.id}`}>
+                      <Cart>
+                        <BsCart />
+                      </Cart>
+                    </Link>
+                  </Banner>
 
-                    <div style={{ color: " #80808091", paddingTop: "15px" }}>
-                      {x.name}
-                    </div>
-                    <div style={{ paddingTop: "5px" }}>
-                      {x.prices[numm].currency.symbol}
-                      {x.prices[numm].amount}
-                      <br />
-                    </div>
-                  </Card>
-                )
-              )}
+                  <CardTitle>{x.name}</CardTitle>
+                  <div style={{ padding: "5px" }}>
+                    {x.prices[numm].currency.symbol}
+                    {x.prices[numm].amount}
+                    <br />
+                  </div>
+                </Card>
+              ))}
           </CardsContainer>
         </FirstContainer>
       </>
@@ -130,11 +183,11 @@ class ProductsListing extends React.Component<
   }
 }
 
-function mapDispatchToProps(state: any) {
+export function mapStateToProps(state: any) {
   return {
     category: state.action["selectedCategory"],
     currency: state.action["selectedCurrency"],
   };
 }
 
-export default connect(mapDispatchToProps, null)(ProductsListing);
+export default connect(mapStateToProps, null)(ProductsListing);

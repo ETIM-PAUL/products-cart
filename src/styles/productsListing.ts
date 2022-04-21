@@ -20,49 +20,63 @@ export const CardsContainer = styled.div`
 display: flex;
 width: 90%;
 margin: auto;
-gap: 20px;
+gap: 30px;
 flex-wrap: wrap;
 justify-content: center;
+`;
+export const Banner = styled.div`
+position:relative;
+`
+export const Cart = styled.div`
+background: #14d614;
+width: 27px;
+height: 27px;
+border-radius: 50%;
+display: none;
+align-items: center;
+text-align: center;
+justify-content: center;
+color:#f6f1f1;
+cursor:pointer;
+left:80%;
+position:absolute;
+float:left;
+top: 93.5%;
+&:hover{
+  background: green;
+}
 `;
 
 export const Card = styled.div`
 flex: 0 1 calc(25% - 1em);
-&:hover{
-box-shadow: 5px 5px 5px 5px #1410100d;
 
+&:hover{
+box-shadow: 5px 5px 5px 10px #1410100d;
+}
+&:hover ${Cart} {
+  display:grid;
 }
 `;
 
-export const CardImage = styled.div<{ background: string }>`
-  grid-area: image;
-  background-image: url(${({ background }) => background});
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  background-size: cover;
+export const CardTitle = styled.div`
+color: #80808091;
+ padding: 5px;
 `;
 
 export const WaterMark = styled.span`
-// position: relative;
-top: 0;
-bottom: 0;
-left: 0;
-right: 0;
-z-index: -1;
-
-color: gainsboro;
+position: absolute;
+top: 50%;
+left: 30%;
+color: #8f8a8a;
 font-size: 20px;
 font-weight: 50px;
-display: flex;
+display: grid;
 justify-content: center;
 align-content: center;
-opacity: 2.0;
+opacity: 3;
 font-variant-caps: all-small-caps;
 
 `
-export const CardTextWrapper = styled.div`
-  grid-area: text;
-  margin: 25px;
-`;
 
 export const CardTextDate = styled.span`
   color: rgb(255, 7, 110);

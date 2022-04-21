@@ -14,6 +14,7 @@ import { client } from "../../App";
 import { connect } from "react-redux";
 import { setCategoryTitle, setCurrencyType } from "../../redux/actions/actions";
 import { TopNavTypes } from "../../types";
+import { Link } from "react-router-dom";
 
 class TopNav extends React.Component<
   { setCategoryTitle: any; setCurrencyType: any },
@@ -37,7 +38,6 @@ class TopNav extends React.Component<
   selectedCurrencyType(currency: string) {
     this.setState({ currency: currency });
     this.props.setCurrencyType(currency);
-    console.log(currency);
   }
 
   componentDidMount() {
@@ -90,9 +90,20 @@ class TopNav extends React.Component<
           <Logo>Logo</Logo>
 
           <div>
-            <SingleIcon data-badge="2">
-              <BsCart />
-            </SingleIcon>
+            <Link to={"/cart"}>
+              <SingleIcon>
+                <BsCart />
+                <span
+                  style={{
+                    backgroundColor: "green",
+                    borderRadius: "50%",
+                    fontSize: "15px",
+                  }}
+                >
+                  5
+                </span>
+              </SingleIcon>
+            </Link>
 
             <SingleIcon>
               <DropDownContent
