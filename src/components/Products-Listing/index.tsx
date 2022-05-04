@@ -11,68 +11,45 @@ import {
   Banner,
 } from "../../styles/productsListing";
 import { connect } from "react-redux";
-import { client } from "../../App";
 import { CardPropsTypes } from "../../types";
 import { BsCart } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { Get_ProductList } from "../../queries";
+import { addToCart, getTotals } from "../../redux/cartSlice";
 // import { mapDispatchToProps } from "../../redux/redux-functions";
 
 class ProductsListing extends React.Component<
-  { category: string; currency: any },
-  { products: []; num: number }
+  { category: string; currency: string; addToCart: any; getTotals: any },
+  { products: []; category: string; currency: string; attribute: any }
 > {
   constructor(props: any) {
     super(props);
     this.state = {
       products: [],
-      num: 0,
+      category: this.props.category,
+      currency: this.props.currency,
+      attribute: [],
     };
+  }
+
+  addProductToCart(product: {}, attribute: any) {
+    attribute.forEach((element: any) => {
+      this.state.attribute.push(element.items[0]);
+    });
+    let attr = this.state.attribute;
+    this.props.addToCart({ product, attr });
+    this.setState({ attribute: [] });
+    this.props.getTotals();
   }
   componentDidMount() {
     let category = this.props.category;
     try {
-      client
-        .query({
-          query: gql`
-            query category {
-              category(input: { title: "${category}" }) {
-                name
-                products {
-                  id
-                  name
-                  inStock
-                  gallery
-                  description
-                  category
-                  brand
-                  attributes {
-                    id
-                    name
-                    type
-                    items {
-                      displayValue
-                      value
-                      id
-                    }
-                  }
-                  prices {
-                    currency {
-                      label
-                      symbol
-                    }
-                    amount
-                  }
-                }
-              }
-            }
-          `,
-        })
-        .then((result) => {
-          this.setState({
-            products: result.data.category?.products,
-          });
-          console.log(result.data.category?.products);
+      Get_ProductList(category).then((result) => {
+        this.setState({
+          products: result.data.category?.products,
+          category: result.data.category?.name,
         });
+      });
     } catch (error) {
       console.log(error);
     }
@@ -81,97 +58,54 @@ class ProductsListing extends React.Component<
   componentDidUpdate(prevState: any) {
     let currency = this.props.currency;
     let category = this.props.category;
-    if (prevState.category !== category && prevState.currency !== currency) {
-      client
-        .query({
-          query: gql`
-            query category {
-              category(input: { title: "${category}" }) {
-                name
-                products {
-                  id
-                  name
-                  inStock
-                  gallery
-                  description
-                  category
-                  brand
-                  attributes {
-                    id
-                    name
-                    type
-                    items {
-                      displayValue
-                      value
-                      id
-                    }
-                  }
-                  prices {
-                    currency {
-                      label
-                      symbol
-                    }
-                    amount
-                  }
-                }
-              }
-            }
-          `,
-        })
-        .then((result) => {
-          this.setState({
-            products: result.data.category.products,
-          });
-          console.log(result.data.category);
+    if (prevState.category !== category || prevState.currency !== currency) {
+      Get_ProductList(category).then((result) => {
+        this.setState({
+          products: result.data.category.products,
         });
-      if (this.props.currency?.includes("USD")) {
-        this.setState({ num: 0 });
-      }
-      if (this.props.currency?.includes("GBP")) {
-        this.setState({ num: 1 });
-      }
-      if (this.props.currency?.includes("AUD")) {
-        this.setState({ num: 2 });
-      }
-      if (this.props.currency?.includes("JPY")) {
-        this.setState({ num: 3 });
-      }
-      if (this.props.currency?.includes("RUB")) {
-        this.setState({ num: 4 });
-      }
+      });
     }
   }
 
   render() {
-    let numm = this.state.num;
     return (
       <>
         <FirstContainer>
-          <Heading>All Categories</Heading>
+          <Heading>{this.props.category.toUpperCase()} CATEGORIES</Heading>
           <CardsContainer>
             {this.state.products?.length >= 0 &&
               this.state.products.map((x: CardPropsTypes) => (
                 <Card key={x.name}>
                   <Banner>
-                    <img
-                      src={x.gallery[0]}
-                      height={250}
-                      width={250}
-                      alt="Product Img"
-                      style={{ margin: "auto" }}
-                    />
-                    {x.inStock === false && <WaterMark>Out of stock</WaterMark>}
                     <Link to={`/product/${x.id}`}>
-                      <Cart>
-                        <BsCart />
-                      </Cart>
+                      <img
+                        src={x.gallery[0]}
+                        height={250}
+                        width={305}
+                        alt="Product Img"
+                      />
+                      {x.inStock === false && (
+                        <WaterMark>Out of stock</WaterMark>
+                      )}
                     </Link>
+                    <Cart>
+                      <BsCart
+                        onClick={() => this.addProductToCart(x, x.attributes)}
+                      />
+                    </Cart>
                   </Banner>
 
                   <CardTitle>{x.name}</CardTitle>
                   <div style={{ padding: "5px" }}>
-                    {x.prices[numm].currency.symbol}
-                    {x.prices[numm].amount}
+                    {x.prices.map(
+                      (p: any) =>
+                        p.currency.label === this.props.currency && (
+                          <p>
+                            {p.currency.symbol}
+                            {p.amount}
+                          </p>
+                        )
+                    )}
                     <br />
                   </div>
                 </Card>
@@ -185,9 +119,16 @@ class ProductsListing extends React.Component<
 
 export function mapStateToProps(state: any) {
   return {
-    category: state.action["selectedCategory"],
-    currency: state.action["selectedCurrency"],
+    category: state.selection["selectedCategory"],
+    currency: state.selection["selectedCurrency"],
   };
 }
 
-export default connect(mapStateToProps, null)(ProductsListing);
+function mapDispatchToProps(dispatch: any) {
+  return {
+    addToCart: (product: any) => dispatch(addToCart(product)),
+    getTotals: () => dispatch(getTotals()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsListing);

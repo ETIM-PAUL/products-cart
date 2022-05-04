@@ -22,5 +22,8 @@
   },
   "include": [
     "src"
-, "queries.ts"  ]
+, "queries.ts"  ],
+"types": [
+  "node"
+]
 }

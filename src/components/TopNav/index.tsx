@@ -1,5 +1,4 @@
 import React from "react";
-import { useQuery, gql } from "@apollo/client";
 import { BsCart } from "react-icons/bs";
 import {
   TopHeading,
@@ -9,15 +8,24 @@ import {
   SingleIcon,
   DropDownContent,
   DropItem,
+  CartSpan,
+  Overlay,
+  MiniCart,
+  CartDiv,
 } from "../../styles/topNav";
-import { client } from "../../App";
 import { connect } from "react-redux";
-import { setCategoryTitle, setCurrencyType } from "../../redux/actions/actions";
+import { setCategory, setCurrency } from "../../redux/selectSlice";
 import { TopNavTypes } from "../../types";
-import { Link } from "react-router-dom";
-
+import { Get_Category, Get_Currency } from "../../queries";
+import { getTotals } from "../../redux/cartSlice";
+import CartOverlay from "../Cart/CartOverlay";
 class TopNav extends React.Component<
-  { setCategoryTitle: any; setCurrencyType: any },
+  {
+    setCategory: any;
+    setCurrency: any;
+    totalQuantity: number;
+    setTotalPrice: any;
+  },
   TopNavTypes
 > {
   constructor(props: any) {
@@ -32,42 +40,31 @@ class TopNav extends React.Component<
   }
   selectedCategoryTitle(title: string) {
     this.setState({ category: title });
-    this.props.setCategoryTitle(title);
+    this.props.setCategory(title);
   }
 
   selectedCurrencyType(currency: string) {
     this.setState({ currency: currency });
-    this.props.setCurrencyType(currency);
+    this.props.setCurrency(currency);
+    this.props.setTotalPrice();
   }
 
   componentDidMount() {
+    Get_Category().then((result) =>
+      this.setState({
+        categories: result.data.categories,
+      })
+    );
+
+    Get_Currency().then((result) =>
+      this.setState({
+        currencies: result.data.currencies,
+      })
+    );
     let category = this.state.category;
     let currency = this.state.currency;
-    client
-      .query({
-        query: gql`
-          query categories {
-            categories {
-              name
-            }
-          }
-        `,
-      })
-      .then((result) => this.setState({ categories: result.data.categories }));
-    client
-      .query({
-        query: gql`
-          query currencies {
-            currencies {
-              label
-              symbol
-            }
-          }
-        `,
-      })
-      .then((result) => this.setState({ currencies: result.data.currencies }));
-    this.props.setCategoryTitle(category);
-    this.props.setCurrencyType(currency.toString());
+    this.props.setCategory(category);
+    this.props.setCurrency(currency);
   }
 
   render() {
@@ -90,20 +87,15 @@ class TopNav extends React.Component<
           <Logo>Logo</Logo>
 
           <div>
-            <Link to={"/cart"}>
-              <SingleIcon>
-                <BsCart />
-                <span
-                  style={{
-                    backgroundColor: "green",
-                    borderRadius: "50%",
-                    fontSize: "15px",
-                  }}
-                >
-                  5
-                </span>
-              </SingleIcon>
-            </Link>
+            <CartDiv>
+              <BsCart />
+              <CartSpan>{this.props.totalQuantity}</CartSpan>
+              <Overlay>
+                <MiniCart>
+                  <CartOverlay />
+                </MiniCart>
+              </Overlay>
+            </CartDiv>
 
             <SingleIcon>
               <DropDownContent
@@ -130,11 +122,16 @@ class TopNav extends React.Component<
 
 function mapDispatchToProps(dispatch: any) {
   return {
-    setCategoryTitle: (category: string) =>
-      dispatch(setCategoryTitle(category)),
-    setCurrencyType: (currency: string) =>
-      dispatch(setCurrencyType(currency.toString())),
+    setCategory: (category: string) => dispatch(setCategory(category)),
+    setCurrency: (currency: string) => dispatch(setCurrency(currency)),
+    setTotalPrice: () => dispatch(getTotals()),
   };
 }
 
-export default connect(null, mapDispatchToProps)(TopNav);
+function mapStateToProps(state: any) {
+  return {
+    totalQuantity: state.cart.cartTotalQuantity,
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopNav);

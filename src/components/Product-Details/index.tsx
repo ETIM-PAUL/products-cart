@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor } from "react";
+import * as React from "react";
 import {
   DetailsContainer,
   ProductImages,
@@ -7,48 +7,18 @@ import {
   Attribute,
   AddButton,
   AttributeButton,
+  ClickedAttributeButton,
 } from "../../styles/productDetails";
 import { useParams } from "react-router";
 import DOMPurify from "dompurify";
-import parse from "html-react-parser";
+import parse, { attributesToProps } from "html-react-parser";
 import { Product } from "../../types";
 import { Get_Product } from "../../queries";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { connect } from "react-redux";
-import { addToCart } from "../../redux/actions/actions";
+import { addToCart, getTotals } from "../../redux/cartSlice";
+import { initialProduct } from "../../product.state";
 import { toast } from "react-toastify";
-const initialProduct: Product = {
-  id: "",
-  name: "",
-  inStock: false,
-  gallery: [],
-  description: "",
-  category: "",
-  brand: "",
-  attributes: [
-    {
-      id: "",
-      name: "",
-      type: "",
-      items: [
-        {
-          displayValue: "",
-          value: "",
-          id: "",
-        },
-      ],
-    },
-  ],
-  prices: [
-    {
-      currency: {
-        label: "",
-        symbol: "",
-      },
-      amount: 0,
-    },
-  ],
-};
 
 class ProductDetails extends React.Component<
   {
@@ -56,35 +26,62 @@ class ProductDetails extends React.Component<
     query: { data: any };
     currency: string;
     addToCart: any;
+    getTotals: any;
   },
-  { product: Product; imagePreview: string; currentCurrency: any }
+  {
+    product: Product;
+    imagePreview: string;
+    currentCurrency: any;
+    attributes: any;
+    isClicked: Boolean;
+    attributesLength: number;
+  }
 > {
   constructor(props: any) {
     super(props);
     this.state = {
       product: { ...initialProduct },
       imagePreview: "",
-      currentCurrency: "",
+      currentCurrency: this.props.currency,
+      attributes: [],
+      isClicked: false,
+      attributesLength: 0,
     };
   }
-  addProductToCart(product: {}) {
-    // console.log(product);
-    this.props.addToCart(product);
+  addProductToCart(product: { attributes: any }) {
+    let attr = this.state.attributes;
+    if (product?.attributes.length !== attr.length) {
+      toast("Please select an attribute for each attributes", {
+        position: "top-center",
+      });
+    } else if (product?.attributes.length === attr.length) {
+      this.props.addToCart({ product, attr });
+      this.props.getTotals();
+    }
   }
+
+  setAttributes(itm: {}, attr: string) {
+    this.setState({ isClicked: true });
+    let attribute = this.state.attributes;
+    const existingAttribute = attribute.findIndex((a: any) => a.attr === attr);
+    if (existingAttribute >= 0) {
+      attribute.splice(existingAttribute, 1, { itm, attr });
+    } else {
+      attribute.push({ itm, attr });
+    }
+    // this.setState({ attributes: [] });
+  }
+
   componentDidMount() {
     let { id } = this.props.params;
     Get_Product(id).then((res) => {
       this.setState({
         product: res.data.product,
         imagePreview: res.data.product.gallery[0],
-        currentCurrency: this.props.currency.toString(),
+        attributesLength: res.data.product.attributes.length,
       });
     });
   }
-  componentDidUpdate() {
-    // this.setState({ currentCurrency: this.props.currency });
-  }
-
   render() {
     const cleanHTML = DOMPurify.sanitize(this.state.product.description, {
       USE_PROFILES: { html: true },
@@ -155,17 +152,29 @@ class ProductDetails extends React.Component<
                           key={itm.id}
                           style={{
                             backgroundColor: `${itm.id}`,
-                            height: "30px",
-                            width: "45px",
+                            height: "20px",
+                            width: "20px",
                             border: "1px solid black",
                             cursor: "pointer",
                           }}
-                        ></AttributeButton>
+                          onClick={() => this.setAttributes(itm, attr.id)}
+                        />
                       ))}
 
                     {attr.type !== "swatch" &&
                       attr.items.map((itm) => (
-                        <AttributeButton key={itm.id}>
+                        <AttributeButton
+                          key={itm.id}
+                          onClick={() => this.setAttributes(itm, attr.id)}
+                          style={
+                            this.state.isClicked
+                              ? {
+                                  backgroundColor: "black",
+                                  color: "white",
+                                }
+                              : {}
+                          }
+                        >
                           {itm.value}
                         </AttributeButton>
                       ))}
@@ -175,7 +184,7 @@ class ProductDetails extends React.Component<
               <Attribute>PRICE:</Attribute>
               {this.state.product.prices.map(
                 (p) =>
-                  p.currency.label === this.state.currentCurrency && (
+                  p.currency.label === this.props.currency && (
                     <p>
                       <b>
                         {p.currency.symbol}
@@ -202,15 +211,15 @@ class ProductDetails extends React.Component<
 
 function mapStateToProps(state: any) {
   return {
-    currency: state.action["selectedCurrency"],
+    currency: state.selection["selectedCurrency"],
   };
 }
 function mapDispatchToProps(dispatch: any) {
   return {
     addToCart: (product: any) => dispatch(addToCart(product)),
+    getTotals: () => dispatch(getTotals()),
   };
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 const Prop = (props: any) => <ProductDetails {...props} params={useParams()} />;
 export default connect(mapStateToProps, mapDispatchToProps)(Prop);

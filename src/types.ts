@@ -8,10 +8,8 @@ export type TopNavTypes = {
 
 export type CartTypes = {
   cartItems:[]
-  categories: [];
-    category: string;
-    currencies:[];
-    currency:string
+  num:number
+  attribute:string
 };
 
 export type CardPropsTypes = {
@@ -20,6 +18,7 @@ export type CardPropsTypes = {
   prices: any;
   gallery: ["strings"];
   inStock: boolean;
+  attributes:[]
 }
 
 export interface Product {
@@ -53,4 +52,10 @@ export interface Product {
         amount:number
       }
   ];
+}
+
+export interface ItemProps extends Product {
+  cartQuantity:number
+  imageIndex:number
+  selectedAttributes:any
 }

@@ -4,22 +4,18 @@ export const DetailsContainer = styled.div`
   display:flex;
   justify-content: space-between;
   width: 90%;
-  // background: blue;
   margin: 25px auto;
 `
 export const ProductImages = styled.div`
-  // background:green;
   width:15%;
   height:100vh;
 `
 export const ProductImage = styled.div`
-  // background:red;
   width:50%;
   height:100vh;
   margin-left:30px;
 `
 export const ProductInfo = styled.div`
-  // background:yellow;
   width:35%;
   height:100vh;
   margin-left:30px;
@@ -31,17 +27,26 @@ export const Attribute = styled.span`
 `
 
 export const AttributeButton = styled.button`
-  background-color: #fff;
   height: 30px;
-  width: 45px;
+  background-color: #fff;
+  width: 49px;
   border: 1px solid black;
-  cursor: pointer;
   textAlign: center;
+  justifyContent: center;
   &:hover{
     background-color:#000;
     color:white;
-  }
-
+  },
+`
+export const ClickedAttributeButton = styled.button`
+  height: 30px;
+  background-color:#000;
+  width: 49px;
+  border: 1px solid black;
+  cursor: pointer;
+  textAlign: center;
+  justifyContent: center;
+  color:white;
 `
 
 export const AddButton = styled.button`
