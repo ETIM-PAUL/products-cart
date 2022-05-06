@@ -5,6 +5,7 @@ export const DetailsContainer = styled.div`
   justify-content: space-between;
   width: 90%;
   margin: 25px auto;
+  padding: 15px;
 `
 export const ProductImages = styled.div`
   width:15%;
@@ -19,44 +20,74 @@ export const ProductInfo = styled.div`
   width:35%;
   height:100vh;
   margin-left:30px;
+  color:#1D1F22;
+`
+export const ProductBrand = styled.div`
+font-family: Raleway;
+font-size: 30px;
+font-weight: 600;
+line-height: 27px;
+letter-spacing: 0em;
+text-align: left;
+display: flex;
+align-items: center;
+`
+export const ProductName = styled.div`
+font-family: Raleway;
+font-size: 15px;
+font-weight: 300;
+line-height: 27px;
+letter-spacing: 0em;
+text-align: left;
+display: flex;
+align-items: center;
 `
 
-export const Attribute = styled.span`
+export const ProductPrice = styled.div`
+font-weight: 600;
+`
+
+export const Attribute = styled.div`
   font-variant-caps: all-small-caps;
   font-weight: 600;
+padding-top:10px;
+`
+
+export const AttributeSwatch = styled.button`
+height: 20px;
+width: 20px;
+border: 1px solid black;
+cursor: pointer;
+&:focus{
+border: 1px solid red;
+},
 `
 
 export const AttributeButton = styled.button`
   height: 30px;
   background-color: #fff;
-  width: 49px;
+  width: 52px;
   border: 1px solid black;
   textAlign: center;
   justifyContent: center;
-  &:hover{
+  cursor:pointer;
+  &:focus{
     background-color:#000;
     color:white;
   },
-`
-export const ClickedAttributeButton = styled.button`
-  height: 30px;
-  background-color:#000;
-  width: 49px;
-  border: 1px solid black;
-  cursor: pointer;
-  textAlign: center;
-  justifyContent: center;
-  color:white;
-`
+  
 
+`
 export const AddButton = styled.button`
-width: 100%;
+width: 58%;
 height: 35px;
 color: #fff;
-background-color: green;
+background-color: #5ECE7B;
 border: none;
 textAlign: center;
 cursor: pointer;
+margin-top:20px;
+
  &:hover{
   background-color:#0a430a;
 }

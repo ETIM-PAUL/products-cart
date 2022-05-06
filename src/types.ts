@@ -4,11 +4,11 @@ export type TopNavTypes = {
     category: string;
     currencies:[];
     currency:string
+    currencySymbol:string
 };
 
 export type CartTypes = {
   cartItems:[]
-  num:number
   attribute:string
 };
 
@@ -19,6 +19,13 @@ export type CardPropsTypes = {
   gallery: ["strings"];
   inStock: boolean;
   attributes:[]
+}
+
+export type ProductDetailsTypes = {
+product: Product;
+imagePreview: string;
+attributes: any;
+attributesLength: number;
 }
 
 export interface Product {

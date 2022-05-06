@@ -1,5 +1,4 @@
 import React from "react";
-import { gql } from "@apollo/client";
 import {
   FirstContainer,
   Heading,
@@ -16,7 +15,6 @@ import { BsCart } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { Get_ProductList } from "../../queries";
 import { addToCart, getTotals } from "../../redux/cartSlice";
-// import { mapDispatchToProps } from "../../redux/redux-functions";
 
 class ProductsListing extends React.Component<
   { category: string; currency: string; addToCart: any; getTotals: any },
@@ -34,7 +32,9 @@ class ProductsListing extends React.Component<
 
   addProductToCart(product: {}, attribute: any) {
     attribute.forEach((element: any) => {
-      this.state.attribute.push(element.items[0]);
+      let itm = element.items[0];
+      let attr = element.id;
+      this.state.attribute.push({ itm, attr });
     });
     let attr = this.state.attribute;
     this.props.addToCart({ product, attr });
@@ -100,7 +100,7 @@ class ProductsListing extends React.Component<
                     {x.prices.map(
                       (p: any) =>
                         p.currency.label === this.props.currency && (
-                          <p>
+                          <p key={p.currency.symbol}>
                             {p.currency.symbol}
                             {p.amount}
                           </p>

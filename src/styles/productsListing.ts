@@ -1,29 +1,30 @@
 import styled from "styled-components"
 
 export const FirstContainer = styled.div`
-  margin-top: -22px;
+  margin: 20px auto;
   background-color: #fff;
-  width: 100%;
+  width: 90%;
   height: 100vh;
-  font-family: serif
+  font-family: serif;
 `
 export const Heading = styled.div`
   color: #000;
-  font-size: 25px;
-  padding: 3rem 2.5rem;
+  font-size: 20px;
+  padding-top: 2.5rem;
 `
 export const CardsDiv = styled.div`
 
 `;
 
 export const CardsContainer = styled.div`
-display: flex;
-width: 90%;
+display: inline-flex;
 margin: auto;
 gap: 30px;
+justify-content: space-between;
 flex-wrap: wrap;
-justify-content: center;
+padding-top: 3rem;
 `;
+
 export const Banner = styled.div`
 position:relative;
 `
@@ -49,9 +50,8 @@ top: 93.5%;
 
 export const Card = styled.div`
 flex: 0 1 calc(25% - 1em);
-
 &:hover{
-box-shadow: 5px 5px 5px 10px #1410100d;
+box-shadow: 5px 5px 5px 5px #1410100d;
 }
 &:hover ${Cart} {
   display:grid;

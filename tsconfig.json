@@ -21,8 +21,8 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src"
-, "queries.ts"  ],
+    "src/*/*"
+, "queries.ts", "src/props.ts"  ],
 "types": [
   "node"
 ]

@@ -8,30 +8,39 @@ import {
   decreaseCart,
   getTotals,
 } from "../../redux/cartSlice";
-import { Attribute, AttributeButton, ViewBag } from "../../styles/cartOverlay";
+import {
+  Attribute,
+  AttributeButton,
+  ViewBag,
+  CartOverlayContainer,
+  CartAttributes,
+  CartOverlayImage,
+  CartOverlaySplit,
+  OverlaySide,
+  Button,
+  ItemQuantityChange,
+  CartOverlayBanner,
+  SecondButton,
+  ButtonDiv,
+  TotalDiv,
+  TotalAndButton,
+} from "../../styles/cartOverlay";
 import { CartTypes, ItemProps } from "../../types";
 import { FaLessThan, FaGreaterThan } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import {
+  AttributeSwatch,
+  Bold,
+  NoStyleDiv,
+  Paragraph,
+} from "../../styles/cart";
+import { CartProps } from "../../props";
 
-class CartOverlay extends React.Component<
-  {
-    cart: [];
-    decreaseCart: any;
-    addToCart: any;
-    totalQuantity: number;
-    totalAmount: number;
-    getTotals: any;
-    currency: string;
-    changeImageUp: any;
-    changeImageDown: any;
-  },
-  CartTypes
-> {
+class CartOverlay extends React.Component<CartProps, CartTypes> {
   constructor(props: any) {
     super(props);
     this.state = {
       cartItems: this.props.cart,
-      num: 0,
       attribute: "",
     };
   }
@@ -58,53 +67,33 @@ class CartOverlay extends React.Component<
   render() {
     return (
       <>
-        <div
-          style={{
-            width: "90%",
-            margin: "auto",
-            backgroundColor: "#fff",
-            padding: "0 2px",
-          }}
-        >
-          <b>My Bag: </b> {this.props.totalQuantity} items
+        <CartOverlayContainer>
+          <Bold>My Bag: </Bold> {this.props.totalQuantity} items
           <br />
           {this.state.cartItems?.length > 0 ? (
             this.state.cartItems.map((item: ItemProps) => (
-              <div key={item.id}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginBottom: "15px",
-                  }}
-                  key={item.id}
-                >
-                  <div>
-                    <p>{item.name}</p>
-                    <p>{item.brand}</p>
+              <NoStyleDiv key={item.id}>
+                <CartOverlayBanner key={item.id}>
+                  <NoStyleDiv>
+                    <Paragraph>{item.name}</Paragraph>
+                    <Paragraph>{item.brand}</Paragraph>
                     {item.prices?.map(
                       (p) =>
                         p.currency.label === this.props.currency && (
-                          <p key={p.currency.label}>
-                            <b>
+                          <Paragraph key={p.currency.label}>
+                            <Bold>
                               {p.currency.symbol}
                               {p.amount}
-                            </b>
-                          </p>
+                            </Bold>
+                          </Paragraph>
                         )
                     )}
 
-                    <div>
+                    <NoStyleDiv>
                       {item.attributes.map((attr: any) => (
-                        <div key={attr.id}>
+                        <NoStyleDiv key={attr.id}>
                           <Attribute>{attr.name}:</Attribute>
-                          <div
-                            style={{
-                              display: "flex",
-                              gap: "3px",
-                              width: "20px",
-                            }}
-                          >
+                          <CartAttributes>
                             {attr.type !== "swatch" &&
                               attr.items.map((attribute: any) => (
                                 <AttributeButton
@@ -125,80 +114,46 @@ class CartOverlay extends React.Component<
                               ))}
                             {attr.type === "swatch" &&
                               attr.items.map((attribute: any) => (
-                                <AttributeButton
+                                <AttributeSwatch
                                   key={attribute.id}
                                   style={
-                                    item.selectedAttributes
-                                      ?.map(
-                                        (x: any) =>
-                                          x.attr === attribute.id || x.itm.id
-                                      )
-                                      .toString()
-                                      .includes(attribute.id)
+                                    item.selectedAttributes.find(
+                                      (x: any) =>
+                                        x.attr === attr.id &&
+                                        x.itm.id === attribute.id
+                                    )
                                       ? {
                                           backgroundColor: `${attribute.id}`,
-                                          height: "15px",
-                                          width: "20px",
-                                          border: "3px solid red",
-                                          cursor: "pointer",
+                                          border: "2px solid red",
                                         }
                                       : {
                                           backgroundColor: `${attribute.id}`,
-                                          height: "15px",
-                                          width: "20px",
-                                          border: "1px solid black",
-                                          cursor: "pointer",
                                         }
                                   }
-                                ></AttributeButton>
+                                ></AttributeSwatch>
                               ))}
-                          </div>
-                        </div>
+                          </CartAttributes>
+                        </NoStyleDiv>
                       ))}
-                    </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "5px",
-                    }}
-                  >
-                    <div style={{ marginTop: "13px", lineHeight: "20px" }}>
-                      <button
+                    </NoStyleDiv>
+                  </NoStyleDiv>
+                  <OverlaySide>
+                    <ItemQuantityChange>
+                      <Button
                         onClick={() => this.increaseCartItemQuantity(item)}
-                        style={{
-                          width: "25px",
-                          height: "20px",
-                          backgroundColor: "#fff",
-                          border: "1px solid black",
-                          cursor: "pointer",
-                        }}
                       >
                         <span style={{ fontSize: "15px" }}>+</span>
-                      </button>
+                      </Button>
                       <h4 style={{ textAlign: "center" }}>
                         {item.cartQuantity}
                       </h4>
-                      <button
-                        style={{
-                          width: "25px",
-                          height: "20px",
-                          backgroundColor: "#fff",
-                          border: "1px solid black",
-                          cursor: "pointer",
-                        }}
+                      <Button
                         onClick={() => this.decreaseCartItemQuantity(item)}
                       >
                         <span style={{ fontSize: "15px" }}>-</span>
-                      </button>
-                    </div>
-                    <div
-                      style={{
-                        backgroundColor: "#fff",
-                        position: "relative",
-                        marginTop: "11px",
-                      }}
-                    >
+                      </Button>
+                    </ItemQuantityChange>
+                    <CartOverlaySplit>
                       <img
                         src={item.gallery[item.imageIndex]}
                         width={90}
@@ -206,76 +161,50 @@ class CartOverlay extends React.Component<
                         style={{ objectFit: "fill" }}
                         alt="itemImg"
                       />
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: "4px",
-                          position: "absolute",
-                          bottom: "15%",
-                          right: "6%",
-                        }}
-                      >
-                        <FaLessThan
-                          style={{ backgroundColor: "black", color: "white" }}
-                          onClick={() => this.props.changeImageDown(item)}
-                        />
-                        <FaGreaterThan
-                          style={{ backgroundColor: "black", color: "white" }}
-                          onClick={() => this.props.changeImageDown(item)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                      <CartOverlayImage>
+                        {item.gallery?.length > 1 && (
+                          <NoStyleDiv>
+                            <FaLessThan
+                              style={{
+                                backgroundColor: "black",
+                                color: "white",
+                              }}
+                              onClick={() => this.props.changeImageDown(item)}
+                            />
+                            <FaGreaterThan
+                              style={{
+                                backgroundColor: "black",
+                                color: "white",
+                              }}
+                              onClick={() => this.props.changeImageDown(item)}
+                            />
+                          </NoStyleDiv>
+                        )}
+                      </CartOverlayImage>
+                    </CartOverlaySplit>
+                  </OverlaySide>
+                </CartOverlayBanner>
                 <hr />
-              </div>
+              </NoStyleDiv>
             ))
           ) : (
-            <div>No Items in Cart</div>
+            <NoStyleDiv>No Items in Cart</NoStyleDiv>
           )}
           {this.props.cart?.length > 0 && (
-            <div
-              style={{
-                display: "grid",
-                marginTop: "30px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "15px",
-                }}
-              >
-                <b>Total</b>
-                <b>{this.props.totalAmount}</b>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "60px",
-                }}
-              >
+            <TotalAndButton>
+              <TotalDiv>
+                <Bold>Total</Bold>
+                <Bold>{this.props.totalAmount}</Bold>
+              </TotalDiv>
+              <ButtonDiv>
                 <Link to={"/cart"}>
                   <ViewBag>VIEW BAG</ViewBag>
                 </Link>
-                <button
-                  style={{
-                    width: "100px",
-                    height: "30px",
-                    backgroundColor: "green",
-                    color: "white",
-                    border: "none",
-                  }}
-                >
-                  CHECK OUT
-                </button>
-              </div>
-            </div>
+                <SecondButton>CHECK OUT</SecondButton>
+              </ButtonDiv>
+            </TotalAndButton>
           )}
-          {/* <div style={{ marginBottom: "90px" }} /> */}
-        </div>
+        </CartOverlayContainer>
       </>
     );
   }

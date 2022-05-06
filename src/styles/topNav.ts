@@ -4,45 +4,49 @@ export const TopHeading = styled.div`
   display: flex;
   justify-content:space-between;
   width: 90%;
-  margin: auto;
+  margin: 15px auto;
   font-variant-caps: all-small-caps;
 `
 
-export const Item = styled.a`
+export const Item = styled.div`
   font-size: 20px;
   color: black;
+  height: 30px;
   &:hover{
     text-decoration: underline;
     color: green;
   }
-  &:target{
+  &:focus{
     color:green;
   }
   cursor:pointer;
-  padding: 0 10px;
   `
   
   export const Menu = styled.div`
   display: inline-flex;
+  gap: 20px;
+  padding-top: 10px;
 `
 
-export const Logo = styled.p`
-  font-size: 20px;
-  color: black;
+export const Logo = styled.div`
+  padding-bottom: 10px;
+
 `
 export const SingleIcon = styled.div`
   font-size: 20px;
   color: black;
   float:right;
-  padding: 10px;
   position: relative;
+  margin-right: 20px;
+  padding-top: 10px;
+
 `
 
 export const DropDownContent = styled.select`
 list-style-type: none;
 box-shadow: 5px 5px 5px 5px #1410100d;
 border:none;
-// margin-bottom:10px;
+width:36px;
 `
 
 export const DropItem = styled.option`
@@ -55,15 +59,15 @@ position:relative;
 `
 
 export const CartSpan = styled.span`
-width: 25px;
-height: 25px;
+width: 23px;
+height: 23px;
 border-radius: 60%;
 text-align: center;
 color:#f6f1f1;
 background-color:#000;
 left:60%;
 position:absolute;
-bottom: 50%;
+bottom: 40%;
 `;
 
 export const Overlay = styled.div`
@@ -84,9 +88,10 @@ export const CartDiv = styled.div`
   font-size: 20px;
   color: black;
   float:right;
-  padding: 10px;
   position: relative;
   cursor:pointer;
+  padding-top: 10px;
+
   &:hover ${Overlay}{
     display:block;
   }

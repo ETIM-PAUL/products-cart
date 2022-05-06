@@ -19,6 +19,8 @@ import { TopNavTypes } from "../../types";
 import { Get_Category, Get_Currency } from "../../queries";
 import { getTotals } from "../../redux/cartSlice";
 import CartOverlay from "../Cart/CartOverlay";
+import logo from "../../img/alogo.png";
+import { NoStyleDiv } from "../../styles/cart";
 class TopNav extends React.Component<
   {
     setCategory: any;
@@ -33,9 +35,10 @@ class TopNav extends React.Component<
     this.state = {
       products: [],
       categories: [],
-      category: "all",
+      category: "",
       currencies: [],
-      currency: "USD",
+      currency: "",
+      currencySymbol: "",
     };
   }
   selectedCategoryTitle(title: string) {
@@ -43,28 +46,29 @@ class TopNav extends React.Component<
     this.props.setCategory(title);
   }
 
-  selectedCurrencyType(currency: string) {
+  selectedCurrencyType(currency: string, symbol: string) {
     this.setState({ currency: currency });
     this.props.setCurrency(currency);
     this.props.setTotalPrice();
+    console.log(symbol);
   }
 
   componentDidMount() {
-    Get_Category().then((result) =>
+    Get_Category().then((result) => {
       this.setState({
         categories: result.data.categories,
-      })
-    );
+        category: result.data.categories[0].name,
+      });
+      this.props.setCategory(this.state.category);
+    });
 
-    Get_Currency().then((result) =>
+    Get_Currency().then((result) => {
       this.setState({
         currencies: result.data.currencies,
-      })
-    );
-    let category = this.state.category;
-    let currency = this.state.currency;
-    this.props.setCategory(category);
-    this.props.setCurrency(currency);
+        currency: result.data.currencies[0].label,
+      });
+      this.props.setCurrency(this.state.currency);
+    });
   }
 
   render() {
@@ -84,9 +88,11 @@ class TopNav extends React.Component<
               ))}
           </Menu>
 
-          <Logo>Logo</Logo>
+          <Logo>
+            <img src={logo} alt="logo" />
+          </Logo>
 
-          <div>
+          <NoStyleDiv>
             <CartDiv>
               <BsCart />
               <CartSpan>{this.props.totalQuantity}</CartSpan>
@@ -99,21 +105,23 @@ class TopNav extends React.Component<
 
             <SingleIcon>
               <DropDownContent
-                onChange={(e: any) => this.selectedCurrencyType(e.target.value)}
+                onChange={(e: any) =>
+                  this.selectedCurrencyType(e.target.value, e.target.id)
+                }
               >
                 {this.state.currencies.length > 0 &&
                   this.state.currencies?.map((cur: any) => (
                     <DropItem
                       key={cur.symbol}
-                      id={cur.symbol}
+                      id={cur.symbol.toString()}
                       value={cur.label.toString()}
                     >
-                      {cur.symbol} {""} {cur.label}
+                      {cur.symbol} &nbsp; {cur.label}
                     </DropItem>
                   ))}
               </DropDownContent>
             </SingleIcon>
-          </div>
+          </NoStyleDiv>
         </TopHeading>
       </>
     );
