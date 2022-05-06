@@ -70,17 +70,6 @@ class TopNav extends React.Component<
       this.props.setCurrency(this.state.currency);
     });
   }
-  // style={
-  //   item.selectedAttributes.find(
-  //     (x: any) =>
-  //       x.attr === attr.id &&
-  //       x.itm.id === attribute.id
-  //   ) && {
-  //     backgroundColor: "black",
-  //     color: "white",
-  //   }
-  // }
-
   render() {
     return (
       <>
