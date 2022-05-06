@@ -8,16 +8,17 @@ export const TopHeading = styled.div`
   font-variant-caps: all-small-caps;
 `
 
-export const Item = styled.div`
+export const Item = styled.a`
   font-size: 20px;
   color: black;
   height: 30px;
+  &:focus{
+    color:green;
+    text-decoration: underline;
+  }
   &:hover{
     text-decoration: underline;
     color: green;
-  }
-  &:focus{
-    color:green;
   }
   cursor:pointer;
   `

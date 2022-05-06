@@ -70,6 +70,16 @@ class TopNav extends React.Component<
       this.props.setCurrency(this.state.currency);
     });
   }
+  // style={
+  //   item.selectedAttributes.find(
+  //     (x: any) =>
+  //       x.attr === attr.id &&
+  //       x.itm.id === attribute.id
+  //   ) && {
+  //     backgroundColor: "black",
+  //     color: "white",
+  //   }
+  // }
 
   render() {
     return (
@@ -82,6 +92,14 @@ class TopNav extends React.Component<
                   key={cat.name}
                   id={cat.name}
                   onClick={(e: any) => this.selectedCategoryTitle(e.target.id)}
+                  style={
+                    localStorage.getItem("category") === cat.name
+                      ? {
+                          color: "green",
+                          textDecoration: "underline",
+                        }
+                      : {}
+                  }
                 >
                   {cat.name}
                 </Item>

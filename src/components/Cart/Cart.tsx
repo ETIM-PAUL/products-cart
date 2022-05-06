@@ -19,7 +19,7 @@ import {
 } from "../../styles/cart";
 import { CartTypes, ItemProps } from "../../types";
 import { FaLessThan, FaGreaterThan } from "react-icons/fa";
-import { AppDispatch, RootState } from "../../app/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import {
   changeImageIndexUp,
   changeImageIndexDown,
