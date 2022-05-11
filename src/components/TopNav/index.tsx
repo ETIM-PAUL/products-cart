@@ -6,12 +6,15 @@ import {
   Logo,
   Menu,
   SingleIcon,
-  DropDownContent,
-  DropItem,
   CartSpan,
   Overlay,
   MiniCart,
   CartDiv,
+  CurrencySwitcher,
+  CurrencyHolder,
+  Currency,
+  CurrencyContainer,
+  Arrow,
 } from "../../styles/topNav";
 import { connect } from "react-redux";
 import { setCategory, setCurrency } from "../../redux/selectSlice";
@@ -20,18 +23,16 @@ import { Get_Category, Get_Currency } from "../../queries";
 import { getTotals } from "../../redux/cartSlice";
 import CartOverlay from "../Cart/CartOverlay";
 import logo from "../../img/alogo.png";
+import arrow from "../../img/arrowDown.png";
 import { NoStyleDiv } from "../../styles/cart";
-class TopNav extends React.Component<
-  {
-    setCategory: any;
-    setCurrency: any;
-    totalQuantity: number;
-    setTotalPrice: any;
-  },
-  TopNavTypes
-> {
+import { Link } from "react-router-dom";
+import { TopNavProps } from "../../props";
+class TopNav extends React.Component<TopNavProps, TopNavTypes> {
+  ref: React.RefObject<HTMLDivElement>;
   constructor(props: any) {
     super(props);
+    this.ref = React.createRef();
+    this.handleClickOutside = this.handleClickOutside.bind(this);
     this.state = {
       products: [],
       categories: [],
@@ -39,16 +40,22 @@ class TopNav extends React.Component<
       currencies: [],
       currency: "",
       currencySymbol: "",
+      currencySwitchDisplay: false,
     };
+  }
+  handleClickOutside(event) {
+    if (this.ref.current && !this.ref.current.contains(event.target)) {
+      this.setState({ currencySwitchDisplay: false });
+    }
   }
   selectedCategoryTitle(title: string) {
     this.setState({ category: title });
     this.props.setCategory(title);
   }
 
-  selectedCurrencyType(currency: string, symbol: string) {
-    this.setState({ currency: currency });
-    this.props.setCurrency(currency);
+  selectedCurrencyType(symbol: any) {
+    this.setState({ currency: symbol });
+    this.props.setCurrency(symbol);
     this.props.setTotalPrice();
     console.log(symbol);
   }
@@ -65,10 +72,15 @@ class TopNav extends React.Component<
     Get_Currency().then((result) => {
       this.setState({
         currencies: result.data.currencies,
-        currency: result.data.currencies[0].label,
+        currency: result.data.currencies[0].symbol,
       });
       this.props.setCurrency(this.state.currency);
     });
+    document.addEventListener("click", this.handleClickOutside, true);
+  }
+
+  componentWillUnmount(): void {
+    document.removeEventListener("click", this.handleClickOutside, true);
   }
   render() {
     return (
@@ -77,21 +89,24 @@ class TopNav extends React.Component<
           <Menu>
             {this.state.categories.length > 0 &&
               this.state.categories?.map((cat: any) => (
-                <Item
-                  key={cat.name}
-                  id={cat.name}
-                  onClick={(e: any) => this.selectedCategoryTitle(e.target.id)}
-                  style={
-                    localStorage.getItem("category") === cat.name
-                      ? {
-                          color: "green",
-                          textDecoration: "underline",
-                        }
-                      : {}
-                  }
-                >
-                  {cat.name}
-                </Item>
+                <Link to={"/"} style={{ textDecoration: "none" }}>
+                  <Item
+                    id={cat.name}
+                    onClick={(e: any) =>
+                      this.selectedCategoryTitle(e.target.id)
+                    }
+                    style={
+                      localStorage.getItem("category") === cat.name
+                        ? {
+                            color: "green",
+                            textDecoration: "underline",
+                          }
+                        : {}
+                    }
+                  >
+                    {cat.name}
+                  </Item>
+                </Link>
               ))}
           </Menu>
 
@@ -111,22 +126,30 @@ class TopNav extends React.Component<
             </CartDiv>
 
             <SingleIcon>
-              <DropDownContent
-                onChange={(e: any) =>
-                  this.selectedCurrencyType(e.target.value, e.target.id)
-                }
+              <CurrencySwitcher
+                onClick={() => this.setState({ currencySwitchDisplay: true })}
               >
-                {this.state.currencies.length > 0 &&
-                  this.state.currencies?.map((cur: any) => (
-                    <DropItem
-                      key={cur.symbol}
-                      id={cur.symbol.toString()}
-                      value={cur.label.toString()}
-                    >
-                      {cur.symbol} &nbsp; {cur.label}
-                    </DropItem>
-                  ))}
-              </DropDownContent>
+                {this.props.currency}
+                <Arrow src={arrow} alt="" />
+              </CurrencySwitcher>
+              {this.state.currencySwitchDisplay && (
+                <CurrencyContainer ref={this.ref}>
+                  <CurrencyHolder>
+                    {this.state.currencies?.map((cur: any) => (
+                      <Currency
+                        onClick={(e: any) => {
+                          this.selectedCurrencyType(e.target.id);
+                          this.setState({ currencySwitchDisplay: false });
+                        }}
+                        key={cur.symbol}
+                        id={cur.symbol}
+                      >
+                        {cur.symbol} &nbsp; {cur.label}
+                      </Currency>
+                    ))}
+                  </CurrencyHolder>
+                </CurrencyContainer>
+              )}
             </SingleIcon>
           </NoStyleDiv>
         </TopHeading>
@@ -146,6 +169,7 @@ function mapDispatchToProps(dispatch: any) {
 function mapStateToProps(state: any) {
   return {
     totalQuantity: state.cart.cartTotalQuantity,
+    currency: state.selection.selectedCurrency,
   };
 }
 

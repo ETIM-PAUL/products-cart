@@ -28,7 +28,7 @@ margin-bottom: 15px;
 export const CartSplit = styled.div`
 display: flex;
 gap: 10px;
-lineHeight: 50px;
+line-height: 42px;
 `
 export const Attribute = styled.span`
   font-variant-caps: all-small-caps;
@@ -37,6 +37,10 @@ export const Attribute = styled.span`
 export const AttributesDiv = styled.div`
 display: flex;
 gap: 10px;
+`
+export const AttributesContainer = styled.div`
+height: 175px;
+overflow:scroll;
 `
 
 export const AttributeButton = styled.button`
@@ -49,10 +53,9 @@ export const AttributeButton = styled.button`
 `
 
 export const AttributeSwatch = styled.button`
-height: 15px;
+height: 20px;
 width: 20px;
 border: 1px solid black;
-cursor: pointer;
 `
 
 export const ChangeItemQuantity = styled.button`

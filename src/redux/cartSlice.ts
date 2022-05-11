@@ -78,7 +78,7 @@ const cartSlice = createSlice({
         );
         state.cartItems.forEach((i: any) => {
           const pricesProxy = JSON.parse(JSON.stringify(i.prices))
-          const amount = pricesProxy.filter((x: any) => x.currency.label === localStorage.getItem("currency"))[0]
+          const amount = pricesProxy.filter((x: any) => x.currency.symbol === localStorage.getItem("currency"))[0]
           total += amount.amount * i.cartQuantity
           currencySymbol = amount.currency.symbol
         })

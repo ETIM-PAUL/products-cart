@@ -16,6 +16,9 @@ import {
   OrderDiv,
   CartSplit,
   RelativePosition,
+  AttributeSwatch,
+  AttributesContainer,
+  Bold,
 } from "../../styles/cart";
 import { CartTypes, ItemProps } from "../../types";
 import { FaLessThan, FaGreaterThan } from "react-icons/fa";
@@ -25,7 +28,6 @@ import {
   changeImageIndexDown,
 } from "../..//redux/cartSlice";
 import {
-  AttributeSwatch,
   ProductBrand,
   ProductName,
   ProductPrice,
@@ -68,116 +70,114 @@ class Cart extends React.Component<CartProps, CartTypes> {
         <hr />
         {this.state.cartItems?.length > 0 ? (
           this.state.cartItems.map((item: ItemProps) => (
-            <NoStyleDiv key={item.id}>
-              <CartRow>
-                <NoStyleDiv>
-                  <ProductBrand>{item.brand}</ProductBrand>
-                  <ProductName>{item.name}</ProductName>
-                  {item.prices?.map(
-                    (p) =>
-                      p.currency.label === this.props.currency && (
-                        <ProductPrice key={p.currency.label}>
-                          {p.currency.symbol}
-                          {p.amount}
-                        </ProductPrice>
-                      )
-                  )}
-
+            <>
+              <AttributesContainer key={item.id}>
+                <CartRow>
                   <NoStyleDiv>
-                    {item.attributes.map((attr: any) => (
-                      <NoStyleDiv key={attr.id}>
-                        <Attribute>{attr.name}:</Attribute>
-                        <AttributesDiv>
-                          {attr.type === "swatch" &&
-                            attr.items.map((attribute: any) => (
-                              <AttributeSwatch
-                                key={attribute.id}
-                                style={
-                                  item.selectedAttributes.find(
-                                    (x: any) =>
-                                      x.attr === attr.id &&
-                                      x.itm.id === attribute.id
-                                  )
-                                    ? {
-                                        backgroundColor: `${attribute.id}`,
-                                        border: "2px solid red",
-                                      }
-                                    : {
-                                        backgroundColor: `${attribute.id}`,
-                                      }
-                                }
-                              ></AttributeSwatch>
-                            ))}
-
-                          {attr.type !== "swatch" &&
-                            attr.items.map((attribute: any) => (
-                              <AttributeButton
-                                key={attribute.id}
-                                style={
-                                  item.selectedAttributes.find(
-                                    (x: any) =>
-                                      x.attr === attr.id &&
-                                      x.itm.id === attribute.id
-                                  ) && {
-                                    backgroundColor: "black",
-                                    color: "white",
-                                  }
-                                }
-                              >
-                                {attribute.value}
-                              </AttributeButton>
-                            ))}
-                        </AttributesDiv>
-                      </NoStyleDiv>
-                    ))}
-                  </NoStyleDiv>
-                </NoStyleDiv>
-
-                <CartSplit
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                    lineHeight: "50px",
-                  }}
-                >
-                  <NoStyleDiv>
-                    <ChangeItemQuantity
-                      onClick={() => this.increaseCartItemQuantity(item)}
-                    >
-                      <span style={{ fontSize: "25px" }}>+</span>
-                    </ChangeItemQuantity>
-                    <h4 style={{ textAlign: "center" }}>{item.cartQuantity}</h4>
-                    <ChangeItemQuantity
-                      onClick={() => this.decreaseCartItemQuantity(item)}
-                    >
-                      <span style={{ fontSize: "25px" }}>-</span>
-                    </ChangeItemQuantity>
-                  </NoStyleDiv>
-                  <RelativePosition>
-                    <img
-                      src={item.gallery[item.imageIndex]}
-                      width={200}
-                      height={150}
-                      alt="itemImg"
-                    />
-
-                    {item.gallery?.length > 1 && (
-                      <GalleryDiv>
-                        <FaLessThan
-                          style={{ backgroundColor: "black", color: "white" }}
-                          onClick={() => this.props.changeImageDown(item)}
-                        />
-                        <FaGreaterThan
-                          style={{ backgroundColor: "black", color: "white" }}
-                          onClick={() => this.props.changeImageUp(item)}
-                        />
-                      </GalleryDiv>
+                    <ProductBrand>{item.brand}</ProductBrand>
+                    <ProductName>{item.name}</ProductName>
+                    {item.prices?.map(
+                      (p) =>
+                        p.currency.symbol === this.props.currency && (
+                          <ProductPrice key={p.currency.label}>
+                            {p.currency.symbol}
+                            {p.amount}
+                          </ProductPrice>
+                        )
                     )}
-                  </RelativePosition>
-                </CartSplit>
-              </CartRow>
+
+                    <NoStyleDiv>
+                      {item.attributes.map((attr: any) => (
+                        <NoStyleDiv key={attr.id}>
+                          <Attribute>{attr.name}:</Attribute>
+                          <AttributesDiv>
+                            {attr.type === "swatch" &&
+                              attr.items.map((attribute: any) => (
+                                <AttributeSwatch
+                                  key={attribute.id}
+                                  style={
+                                    item.selectedAttributes.find(
+                                      (x: any) =>
+                                        x.attr === attr.id &&
+                                        x.itm.id === attribute.id
+                                    )
+                                      ? {
+                                          backgroundColor: `${attribute.id}`,
+                                          border: "2px solid red",
+                                        }
+                                      : {
+                                          backgroundColor: `${attribute.id}`,
+                                        }
+                                  }
+                                ></AttributeSwatch>
+                              ))}
+
+                            {attr.type !== "swatch" &&
+                              attr.items.map((attribute: any) => (
+                                <AttributeButton
+                                  key={attribute.id}
+                                  style={
+                                    item.selectedAttributes.find(
+                                      (x: any) =>
+                                        x.attr === attr.id &&
+                                        x.itm.id === attribute.id
+                                    ) && {
+                                      backgroundColor: "black",
+                                      color: "white",
+                                    }
+                                  }
+                                >
+                                  {attribute.value}
+                                </AttributeButton>
+                              ))}
+                          </AttributesDiv>
+                        </NoStyleDiv>
+                      ))}
+                    </NoStyleDiv>
+                  </NoStyleDiv>
+
+                  <CartSplit>
+                    <NoStyleDiv>
+                      <ChangeItemQuantity
+                        onClick={() => this.increaseCartItemQuantity(item)}
+                      >
+                        <span style={{ fontSize: "25px" }}>+</span>
+                      </ChangeItemQuantity>
+                      <h4 style={{ textAlign: "center" }}>
+                        {item.cartQuantity}
+                      </h4>
+                      <ChangeItemQuantity
+                        onClick={() => this.decreaseCartItemQuantity(item)}
+                      >
+                        <span style={{ fontSize: "25px" }}>-</span>
+                      </ChangeItemQuantity>
+                    </NoStyleDiv>
+                    <RelativePosition>
+                      <img
+                        src={item.gallery[item.imageIndex]}
+                        width={200}
+                        height={150}
+                        alt="itemImg"
+                      />
+
+                      {item.gallery?.length > 1 && (
+                        <GalleryDiv>
+                          <FaLessThan
+                            style={{ backgroundColor: "black", color: "white" }}
+                            onClick={() => this.props.changeImageDown(item)}
+                          />
+                          <FaGreaterThan
+                            style={{ backgroundColor: "black", color: "white" }}
+                            onClick={() => this.props.changeImageUp(item)}
+                          />
+                        </GalleryDiv>
+                      )}
+                    </RelativePosition>
+                  </CartSplit>
+                </CartRow>
+              </AttributesContainer>
               <hr />
-            </NoStyleDiv>
+            </>
           ))
         ) : (
           <NoStyleDiv>No Items in Cart</NoStyleDiv>
@@ -190,10 +190,10 @@ class Cart extends React.Component<CartProps, CartTypes> {
             }}
           >
             <Span>
-              Tax 21%: <b>15</b>
+              Tax 21%: <Bold>{this.props.currency}15</Bold>
             </Span>
             <Span>
-              Qty: <b>{this.props.totalQuantity}</b>
+              Qty: <Bold>{this.props.totalQuantity}</Bold>
             </Span>
             <NoStyleDiv>
               <Span>

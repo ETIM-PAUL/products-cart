@@ -16,6 +16,14 @@ export const ProductImage = styled.div`
   height:100vh;
   margin-left:30px;
 `
+export const ImageHover = styled.img`
+  width:150px;
+  height:80px;
+  cursor:pointer;
+  &:hover{
+    border: 1px solid green;
+  }
+`
 export const ProductInfo = styled.div`
   width:35%;
   height:100vh;
@@ -43,6 +51,11 @@ display: flex;
 align-items: center;
 `
 
+export const ProductParse = styled.div`
+height: 200px;
+overflow:scroll;
+`
+
 export const ProductPrice = styled.div`
 font-weight: 600;
 `
@@ -58,9 +71,9 @@ height: 20px;
 width: 20px;
 border: 1px solid black;
 cursor: pointer;
-&:focus{
+&:hover{
 border: 1px solid red;
-},
+};
 `
 
 export const AttributeButton = styled.button`
@@ -69,17 +82,21 @@ export const AttributeButton = styled.button`
   width: 52px;
   border: 1px solid black;
   textAlign: center;
-  justifyContent: center;
+  justify-content: center;
   cursor:pointer;
+  &:hover{
+    background-color:#000;
+    color:white;
+  };
   &:focus{
     background-color:#000;
     color:white;
-  },
+  };
   
 
 `
 export const AddButton = styled.button`
-width: 58%;
+width: 100%;
 height: 35px;
 color: #fff;
 background-color: #5ECE7B;
@@ -91,4 +108,12 @@ margin-top:20px;
  &:hover{
   background-color:#0a430a;
 }
+`
+export const OutOfStock = styled.button`
+width: 100%;
+height: 35px;
+color: #fff;
+background-color: #0a430a;
+border: none;
+textAlign: center;
 `

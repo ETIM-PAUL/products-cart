@@ -17,3 +17,12 @@ currency: string;
 addToCart: any;
 getTotals: any;
 }
+
+export type TopNavProps = {
+  setCategory: any;
+  setCurrency: any;
+  totalQuantity: number;
+  setTotalPrice: any;
+  currency: string
+  onClickOutside:any
+}

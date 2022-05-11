@@ -1,3 +1,4 @@
+
 export type TopNavTypes = {
   products: [];
     categories: [];
@@ -5,6 +6,7 @@ export type TopNavTypes = {
     currencies:[];
     currency:string
     currencySymbol:string
+    currencySwitchDisplay: boolean
 };
 
 export type CartTypes = {

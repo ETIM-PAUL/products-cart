@@ -11,6 +11,9 @@ import {
   ProductBrand,
   ProductPrice,
   AttributeSwatch,
+  OutOfStock,
+  ProductParse,
+  ImageHover,
 } from "../../styles/productDetails";
 import { useParams } from "react-router";
 import DOMPurify from "dompurify";
@@ -19,7 +22,7 @@ import { ProductDetailsTypes } from "../../types";
 import { Get_Product } from "../../queries";
 import { connect } from "react-redux";
 import { addToCart, getTotals } from "../../redux/cartSlice";
-import { initialProduct } from "../../product.state";
+import { initialProduct } from "../../initialState";
 import { toast } from "react-toastify";
 import { NoStyleDiv } from "../../styles/cart";
 import { ProductDetailsProps } from "../../props";
@@ -70,6 +73,7 @@ class ProductDetails extends React.Component<
       });
     });
   }
+
   render() {
     const cleanHTML = DOMPurify.sanitize(this.state.product.description, {
       USE_PROFILES: { html: true },
@@ -81,14 +85,11 @@ class ProductDetails extends React.Component<
             <ProductImages>
               {this.state.product &&
                 this.state.product.gallery?.map((img) => (
-                  <img
+                  <ImageHover
                     key={img}
                     src={img}
                     alt="product-img"
-                    height={80}
-                    width={150}
                     onMouseOver={() => this.setState({ imagePreview: img })}
-                    style={{ cursor: "pointer" }}
                   />
                 ))}
             </ProductImages>
@@ -129,12 +130,21 @@ class ProductDetails extends React.Component<
                       ))}
 
                     {attr.type !== "swatch" &&
-                      attr.items.map((itm) => (
+                      attr.items.map((item) => (
                         <AttributeButton
-                          key={itm.id}
-                          onClick={() => this.setAttributes(itm, attr.id)}
+                          key={item.id}
+                          onClick={() => this.setAttributes(item, attr.id)}
+                          style={
+                            this.state.attributes.forEach(
+                              (x: any) =>
+                                x.attr === attr.id && x.itm.id === item.id
+                            ) && {
+                              backgroundColor: "black",
+                              color: "white",
+                            }
+                          }
                         >
-                          {itm.value}
+                          {item.value}
                         </AttributeButton>
                       ))}
                   </div>
@@ -144,7 +154,7 @@ class ProductDetails extends React.Component<
               <Attribute>PRICE:</Attribute>
               {this.state.product.prices.map(
                 (p) =>
-                  p.currency.label === this.props.currency && (
+                  p.currency.symbol === this.props.currency && (
                     <ProductPrice key={p.currency.symbol}>
                       {p.currency.symbol}
                       {p.amount}
@@ -152,14 +162,18 @@ class ProductDetails extends React.Component<
                   )
               )}
 
-              <AddButton
-                type="submit"
-                onClick={() => this.addProductToCart(this.state.product)}
-              >
-                ADD TO CART
-              </AddButton>
-
-              <NoStyleDiv>{parse(cleanHTML)}</NoStyleDiv>
+              {this.state.product.inStock === true && (
+                <AddButton
+                  type="submit"
+                  onClick={() => this.addProductToCart(this.state.product)}
+                >
+                  ADD TO CART
+                </AddButton>
+              )}
+              {this.state.product.inStock !== true && (
+                <OutOfStock type="button">OUT OF STOCK</OutOfStock>
+              )}
+              <ProductParse>{parse(cleanHTML)}</ProductParse>
             </ProductInfo>
           </>
         </DetailsContainer>

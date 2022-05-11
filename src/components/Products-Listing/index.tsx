@@ -71,7 +71,7 @@ class ProductsListing extends React.Component<
     return (
       <>
         <FirstContainer>
-          <Heading>{this.props.category.toUpperCase()} CATEGORIES</Heading>
+          <Heading>{this.props.category?.toUpperCase()} CATEGORY</Heading>
           <CardsContainer>
             {this.state.products?.length >= 0 &&
               this.state.products.map((x: CardPropsTypes) => (
@@ -80,26 +80,29 @@ class ProductsListing extends React.Component<
                     <Link to={`/product/${x.id}`}>
                       <img
                         src={x.gallery[0]}
-                        height={250}
-                        width={305}
+                        height={320}
+                        width={405}
                         alt="Product Img"
+                        style={{ objectFit: "fill" }}
                       />
                       {x.inStock === false && (
                         <WaterMark>Out of stock</WaterMark>
                       )}
                     </Link>
-                    <Cart>
-                      <BsCart
-                        onClick={() => this.addProductToCart(x, x.attributes)}
-                      />
-                    </Cart>
+                    {x.inStock === true && (
+                      <Cart>
+                        <BsCart
+                          onClick={() => this.addProductToCart(x, x.attributes)}
+                        />
+                      </Cart>
+                    )}
                   </Banner>
 
                   <CardTitle>{x.name}</CardTitle>
                   <div style={{ padding: "5px" }}>
                     {x.prices.map(
                       (p: any) =>
-                        p.currency.label === this.props.currency && (
+                        p.currency.symbol === this.props.currency && (
                           <p key={p.currency.symbol}>
                             {p.currency.symbol}
                             {p.amount}

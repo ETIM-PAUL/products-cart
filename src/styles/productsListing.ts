@@ -19,19 +19,20 @@ export const CardsDiv = styled.div`
 export const CardsContainer = styled.div`
 display: inline-flex;
 margin: auto;
-gap: 30px;
-justify-content: space-between;
+gap: 15px;
+// justify-content: space-between;
 flex-wrap: wrap;
 padding-top: 3rem;
 `;
 
 export const Banner = styled.div`
 position:relative;
+
 `
 export const Cart = styled.div`
 background: #14d614;
-width: 27px;
-height: 27px;
+width: 40px;
+height: 40px;
 border-radius: 50%;
 display: none;
 align-items: center;
@@ -49,9 +50,9 @@ top: 93.5%;
 `;
 
 export const Card = styled.div`
-flex: 0 1 calc(25% - 1em);
+flex: 0 1 calc(33% - 1em);
 &:hover{
-box-shadow: 5px 5px 5px 5px #1410100d;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 &:hover ${Cart} {
   display:grid;
@@ -68,8 +69,8 @@ position: absolute;
 top: 50%;
 left: 30%;
 color: #8f8a8a;
-font-size: 20px;
-font-weight: 50px;
+font-size: 30px;
+font-weight: 60px;
 display: grid;
 justify-content: center;
 align-content: center;

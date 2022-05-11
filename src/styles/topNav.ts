@@ -8,14 +8,11 @@ export const TopHeading = styled.div`
   font-variant-caps: all-small-caps;
 `
 
-export const Item = styled.a`
+export const Item = styled.div`
   font-size: 20px;
   color: black;
   height: 30px;
-  &:focus{
-    color:green;
-    text-decoration: underline;
-  }
+  text-decoration: unset;
   &:hover{
     text-decoration: underline;
     color: green;
@@ -33,26 +30,49 @@ export const Logo = styled.div`
   padding-bottom: 10px;
 
 `
+
+export const CurrencyContainer = styled.div`
+`
+
+export const CurrencyHolder = styled.ul`
+display:block;
+position: absolute;
+cursor: pointer;
+list-style: none;
+padding: 15px 15px;
+width: 80px;
+height: 120px;
+margin: 5px -15px;
+z-index:1;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+`
+
 export const SingleIcon = styled.div`
-  font-size: 20px;
-  color: black;
-  float:right;
-  position: relative;
-  margin-right: 20px;
-  padding-top: 10px;
+font-size: 20px;
+color: black;
+float:right;
+position: relative;
+margin-right: 20px;
+cursor:pointer;
+
+`
+export const CurrencySwitcher = styled.span`
+cursor:pointer;
+margin-top:5px;
+font-size:30px;
+`
+export const Currency = styled.li`
+justify-content:center;
+align-item:center;
+width:100%;
+&:hover{
+  background-color: gainsboro;
+}
 
 `
 
-export const DropDownContent = styled.select`
-list-style-type: none;
-box-shadow: 5px 5px 5px 5px #1410100d;
-border:none;
-width:36px;
-`
-
-export const DropItem = styled.option`
-background-color: white;
-padding: 3px;
+export const Arrow = styled.img`
+margin: 5px;
 `
 
 export const Banner = styled.div`
