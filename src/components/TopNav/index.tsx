@@ -15,6 +15,7 @@ import {
   Currency,
   CurrencyContainer,
   Arrow,
+  Heading,
 } from "../../styles/topNav";
 import { connect } from "react-redux";
 import { setCategory, setCurrency } from "../../redux/selectSlice";
@@ -27,12 +28,16 @@ import arrow from "../../img/arrowDown.png";
 import { NoStyleDiv } from "../../styles/cart";
 import { Link } from "react-router-dom";
 import { TopNavProps } from "../../props";
+
 class TopNav extends React.Component<TopNavProps, TopNavTypes> {
   ref: React.RefObject<HTMLDivElement>;
+  ref2: React.RefObject<HTMLDivElement>;
   constructor(props: any) {
     super(props);
     this.ref = React.createRef();
+    this.ref2 = React.createRef();
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.handleClickOut = this.handleClickOut.bind(this);
     this.state = {
       products: [],
       categories: [],
@@ -41,6 +46,7 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
       currency: "",
       currencySymbol: "",
       currencySwitchDisplay: false,
+      cartOverlayDisplay: false,
     };
   }
   handleClickOutside(event) {
@@ -48,6 +54,28 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
       this.setState({ currencySwitchDisplay: false });
     }
   }
+
+  handleClickOut(event) {
+    if (this.ref2.current && !this.ref2.current.contains(event.target)) {
+      this.setState({ cartOverlayDisplay: false });
+    }
+  }
+
+  showCart() {
+    if (this.state.cartOverlayDisplay === false) {
+      this.setState({ cartOverlayDisplay: true });
+    } else if (this.state.cartOverlayDisplay === true) {
+      this.setState({ cartOverlayDisplay: false });
+    }
+  }
+  showCurrency() {
+    if (this.state.currencySwitchDisplay === false) {
+      this.setState({ currencySwitchDisplay: true });
+    } else if (this.state.currencySwitchDisplay === true) {
+      this.setState({ currencySwitchDisplay: false });
+    }
+  }
+
   selectedCategoryTitle(title: string) {
     this.setState({ category: title });
     this.props.setCategory(title);
@@ -57,7 +85,6 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
     this.setState({ currency: symbol });
     this.props.setCurrency(symbol);
     this.props.setTotalPrice();
-    console.log(symbol);
   }
 
   componentDidMount() {
@@ -77,15 +104,19 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
       this.props.setCurrency(this.state.currency);
     });
     document.addEventListener("click", this.handleClickOutside, true);
+    document.addEventListener("click", this.handleClickOut, true);
+    document.body.style.margin = "0";
   }
 
   componentWillUnmount(): void {
     document.removeEventListener("click", this.handleClickOutside, true);
+    document.removeEventListener("click", this.handleClickOut, true);
+    document.body.style.margin = "0";
   }
   render() {
     return (
-      <>
-        <TopHeading>
+      <TopHeading>
+        <Heading>
           <Menu>
             {this.state.categories.length > 0 &&
               this.state.categories?.map((cat: any) => (
@@ -115,25 +146,30 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
           </Logo>
 
           <NoStyleDiv>
-            <CartDiv>
-              <BsCart />
-              <CartSpan>{this.props.totalQuantity}</CartSpan>
-              <Overlay>
-                <MiniCart>
-                  <CartOverlay />
-                </MiniCart>
-              </Overlay>
+            <CartDiv ref={this.ref2}>
+              <NoStyleDiv onClick={() => this.showCart()}>
+                <BsCart />
+                {this.props.totalQuantity > 0 && (
+                  <CartSpan>{this.props.totalQuantity}</CartSpan>
+                )}
+              </NoStyleDiv>
+              {this.state.cartOverlayDisplay && (
+                <Overlay>
+                  <MiniCart>
+                    <CartOverlay display={() => this.showCart()} />
+                  </MiniCart>
+                </Overlay>
+              )}
             </CartDiv>
 
-            <SingleIcon>
-              <CurrencySwitcher
-                onClick={() => this.setState({ currencySwitchDisplay: true })}
-              >
+            <SingleIcon ref={this.ref}>
+              <CurrencySwitcher onClick={() => this.showCurrency()}>
                 {this.props.currency}
                 <Arrow src={arrow} alt="" />
               </CurrencySwitcher>
+
               {this.state.currencySwitchDisplay && (
-                <CurrencyContainer ref={this.ref}>
+                <CurrencyContainer>
                   <CurrencyHolder>
                     {this.state.currencies?.map((cur: any) => (
                       <Currency
@@ -152,8 +188,8 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
               )}
             </SingleIcon>
           </NoStyleDiv>
-        </TopHeading>
-      </>
+        </Heading>
+      </TopHeading>
     );
   }
 }

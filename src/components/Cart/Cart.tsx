@@ -70,8 +70,8 @@ class Cart extends React.Component<CartProps, CartTypes> {
         <hr />
         {this.state.cartItems?.length > 0 ? (
           this.state.cartItems.map((item: ItemProps) => (
-            <>
-              <AttributesContainer key={item.id}>
+            <NoStyleDiv key={item.id}>
+              <AttributesContainer>
                 <CartRow>
                   <NoStyleDiv>
                     <ProductBrand>{item.brand}</ProductBrand>
@@ -177,7 +177,7 @@ class Cart extends React.Component<CartProps, CartTypes> {
                 </CartRow>
               </AttributesContainer>
               <hr />
-            </>
+            </NoStyleDiv>
           ))
         ) : (
           <NoStyleDiv>No Items in Cart</NoStyleDiv>
@@ -197,7 +197,11 @@ class Cart extends React.Component<CartProps, CartTypes> {
             </Span>
             <NoStyleDiv>
               <Span>
-                Total: <b>{this.props.totalAmount}</b>
+                Total:{" "}
+                <b>
+                  {this.props.currency}
+                  {this.props.totalAmount}
+                </b>
               </Span>
             </NoStyleDiv>
             <OrderButton>Order</OrderButton>

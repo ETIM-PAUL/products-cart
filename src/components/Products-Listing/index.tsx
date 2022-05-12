@@ -8,6 +8,7 @@ import {
   CardTitle,
   Cart,
   Banner,
+  ProductPrice,
 } from "../../styles/productsListing";
 import { connect } from "react-redux";
 import { CardPropsTypes } from "../../types";
@@ -69,37 +70,37 @@ class ProductsListing extends React.Component<
 
   render() {
     return (
-      <>
-        <FirstContainer>
-          <Heading>{this.props.category?.toUpperCase()} CATEGORY</Heading>
-          <CardsContainer>
-            {this.state.products?.length >= 0 &&
-              this.state.products.map((x: CardPropsTypes) => (
-                <Card key={x.name}>
-                  <Banner>
-                    <Link to={`/product/${x.id}`}>
-                      <img
-                        src={x.gallery[0]}
-                        height={320}
-                        width={405}
-                        alt="Product Img"
-                        style={{ objectFit: "fill" }}
-                      />
-                      {x.inStock === false && (
-                        <WaterMark>Out of stock</WaterMark>
-                      )}
-                    </Link>
-                    {x.inStock === true && (
-                      <Cart>
-                        <BsCart
-                          onClick={() => this.addProductToCart(x, x.attributes)}
-                        />
-                      </Cart>
-                    )}
-                  </Banner>
-
+      <FirstContainer>
+        <Heading>{this.props.category?.toUpperCase()} CATEGORY</Heading>
+        <CardsContainer>
+          {this.state.products?.length >= 0 &&
+            this.state.products.map((x: CardPropsTypes) => (
+              <Card key={x.name}>
+                <Banner>
+                  <Link to={`/product/${x.id}`}>
+                    <img
+                      src={x.gallery[0]}
+                      height={320}
+                      width={400}
+                      alt="Product Img"
+                      style={{ objectFit: "fill" }}
+                    />
+                    {x.inStock === false && <WaterMark>Out of stock</WaterMark>}
+                  </Link>
+                  {x.inStock === true && (
+                    <Cart
+                      onClick={() => this.addProductToCart(x, x.attributes)}
+                    >
+                      <BsCart />
+                    </Cart>
+                  )}
+                </Banner>
+                <Link
+                  to={`/product/${x.id}`}
+                  style={{ textDecoration: "none" }}
+                >
                   <CardTitle>{x.name}</CardTitle>
-                  <div style={{ padding: "5px" }}>
+                  <ProductPrice style={{ padding: "5px", color: "black" }}>
                     {x.prices.map(
                       (p: any) =>
                         p.currency.symbol === this.props.currency && (
@@ -110,12 +111,12 @@ class ProductsListing extends React.Component<
                         )
                     )}
                     <br />
-                  </div>
-                </Card>
-              ))}
-          </CardsContainer>
-        </FirstContainer>
-      </>
+                  </ProductPrice>
+                </Link>
+              </Card>
+            ))}
+        </CardsContainer>
+      </FirstContainer>
     );
   }
 }

@@ -38,6 +38,8 @@ class ProductDetails extends React.Component<
       imagePreview: "",
       attributes: [],
       attributesLength: 0,
+      bgColor: "white",
+      color: "black",
     };
   }
 
@@ -50,6 +52,7 @@ class ProductDetails extends React.Component<
     } else if (product?.attributes.length === attr.length) {
       this.props.addToCart({ product, attr });
       this.props.getTotals();
+      this.setState({ attributes: [] });
     }
   }
 
@@ -99,7 +102,7 @@ class ProductDetails extends React.Component<
                 src={this.state.imagePreview}
                 alt="product-preview"
                 height={500}
-                width={650}
+                width={400}
               />
             </ProductImage>
 
@@ -130,21 +133,12 @@ class ProductDetails extends React.Component<
                       ))}
 
                     {attr.type !== "swatch" &&
-                      attr.items.map((item) => (
+                      attr.items.map((itm) => (
                         <AttributeButton
-                          key={item.id}
-                          onClick={() => this.setAttributes(item, attr.id)}
-                          style={
-                            this.state.attributes.forEach(
-                              (x: any) =>
-                                x.attr === attr.id && x.itm.id === item.id
-                            ) && {
-                              backgroundColor: "black",
-                              color: "white",
-                            }
-                          }
+                          key={itm.id}
+                          onClick={() => this.setAttributes(itm, attr.id)}
                         >
-                          {item.value}
+                          {itm.value}
                         </AttributeButton>
                       ))}
                   </div>

@@ -7,7 +7,7 @@ const initialState = {
     ? JSON.parse(localStorage.getItem("cartItems")!)
     : [],
   cartTotalQuantity: 0,
-  cartTotalAmount: "",
+  cartTotalAmount: 0,
 };
 
 const cartSlice = createSlice({
@@ -64,7 +64,6 @@ const cartSlice = createSlice({
     getTotals(state) {
       let totalPrice = 0;
       let total = 0
-      let currencySymbol = ""
 
       let { quantity } = state.cartItems.reduce(
         (cartTotal:any, cartItem:any) => {
@@ -80,10 +79,9 @@ const cartSlice = createSlice({
           const pricesProxy = JSON.parse(JSON.stringify(i.prices))
           const amount = pricesProxy.filter((x: any) => x.currency.symbol === localStorage.getItem("currency"))[0]
           total += amount.amount * i.cartQuantity
-          currencySymbol = amount.currency.symbol
         })
         totalPrice = parseFloat(total.toFixed(2));
-        state.cartTotalAmount = currencySymbol + totalPrice;
+        state.cartTotalAmount = totalPrice;
         state.cartTotalQuantity = quantity;
       },
 

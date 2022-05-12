@@ -10,12 +10,12 @@ const selectSlice = createSlice({
   initialState,
   reducers: {
     setCategory(state, {payload}) {
-      state.selectedCategory = payload
       localStorage.setItem("category", payload);
+      state.selectedCategory = payload
     },
     setCurrency(state, {payload})  {
-      state.selectedCurrency = payload
       localStorage.setItem("currency", payload);
+      state.selectedCurrency = payload
     },
   }
 });

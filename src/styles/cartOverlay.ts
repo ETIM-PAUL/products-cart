@@ -1,11 +1,10 @@
 import styled from "styled-components"
-import { Overlay } from "./topNav"
 
 export const CartOverlayContainer = styled.div`
 width:90%;
 margin:auto;
 background-color:#fff;
-padding: 0 20px;
+padding-top: 10px;
 `
 export const CartAttributes = styled.div`
 display: flex;
@@ -23,7 +22,6 @@ margin-bottom: 30px;
 `
 export const ButtonDiv = styled.div`
 display: flex;
-margin-bottom: 60px;
 justify-content: space-between;
 `
 export const TotalDiv = styled.div`
@@ -39,6 +37,12 @@ export const AttributeButton = styled.button`
 font-size: 9px;
 `;
 
+export const AttributeSwatch = styled.button`
+height: 10px;
+width: 20px;
+border: 1px solid black;
+`
+
 export const CartOverlaySplit = styled.div`
 background-color: #fff;
 position: relative;
@@ -48,7 +52,21 @@ export const CartOverlayBanner = styled.div`
 display: flex;
 justify-content: space-between;
 margin-bottom: 15px;
+height: 130px;
+overflow:auto;
 `
+export const ItemsCart = styled.div`
+height: 130px;
+width: 100%;
+overflow: auto;
+`
+
+export const CartDiv = styled.div`
+height: 380px;
+width: 100%;
+overflow: auto;
+`
+
 export const CartOverlayImage = styled.div`
 display: flex;
 gap: 4px;
@@ -62,7 +80,7 @@ gap: 5px;
 `
 export const ItemQuantityChange = styled.div`
 margin-top: 13px;
-line-height: 20px;
+line-height: 24px;
 `
 export const Button = styled.button`
 width: 25px;
@@ -70,6 +88,9 @@ height: 20px;
 background-color: #fff;
 border: 1px solid black;
 cursor: pointer;
+&:hover{
+background-color: gainsboro;
+}
 `
 export const SecondButton = styled.button`
 width: 100px;
@@ -77,6 +98,7 @@ height: 30px;
 background-color: green;
 color: white;
 border: none;
+cursor:pointer;
 `
 export const ViewBag = styled.button`
   width: 100px;
@@ -84,7 +106,8 @@ export const ViewBag = styled.button`
   background-color: #fff;
   color: black;
   border: 1px solid black;
-  &:target ${Overlay}{
-    display:none;
-  }
+  cursor:pointer;
+  &:hover{
+    background-color: gainsboro;
+    }
 `

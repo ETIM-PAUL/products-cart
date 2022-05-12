@@ -7,6 +7,7 @@ export type TopNavTypes = {
     currency:string
     currencySymbol:string
     currencySwitchDisplay: boolean
+    cartOverlayDisplay: boolean
 };
 
 export type CartTypes = {
@@ -28,6 +29,8 @@ product: Product;
 imagePreview: string;
 attributes: any;
 attributesLength: number;
+bgColor:string;
+color:string;
 }
 
 export interface Product {

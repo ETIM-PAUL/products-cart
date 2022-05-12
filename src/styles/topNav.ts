@@ -1,11 +1,20 @@
 import styled from "styled-components"
 
 export const TopHeading = styled.div`
-  display: flex;
-  justify-content:space-between;
+width: 100%;
+font-variant-caps: all-small-caps;
+z-index: 3;
+background-color: white;
+position:fixed;
+`
+
+export const Heading = styled.div`
+justify-content:space-between;
+display: flex;
   width: 90%;
-  margin: 15px auto;
-  font-variant-caps: all-small-caps;
+  margin:auto;
+  padding-top:10px;
+
 `
 
 export const Item = styled.div`
@@ -27,7 +36,7 @@ export const Item = styled.div`
 `
 
 export const Logo = styled.div`
-  padding-bottom: 10px;
+  // padding-bottom: 10px;
 
 `
 
@@ -42,8 +51,9 @@ list-style: none;
 padding: 15px 15px;
 width: 80px;
 height: 120px;
-margin: 5px -15px;
 z-index:1;
+margin: 5px -15px;
+background-color:#fff;
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `
 
@@ -92,18 +102,14 @@ bottom: 40%;
 `;
 
 export const Overlay = styled.div`
-position: fixed; 
-width: 100%; 
-height: 100vh; 
+position: absolute; 
 top: 0;
 left: 0;
 right: 0;
 bottom: 0;
-background-color: rgba(0,0,0,0.5); 
-z-index: 2; 
 cursor: pointer; 
 margin-top: 50px;
-display:none;
+z-index:2;
 `
 export const CartDiv = styled.div`
   font-size: 20px;
@@ -112,19 +118,15 @@ export const CartDiv = styled.div`
   position: relative;
   cursor:pointer;
   padding-top: 10px;
-
-  &:hover ${Overlay}{
-    display:block;
-  }
 `
 export const MiniCart = styled.div`
 backgroundColor: #fff;
-width: 250px;
-max-width:250px;
-height:100vh;
-position: relative;
-top: 0;
-left: 77%;
+width: 320px;
+height: 500px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+position: absolute;
+right: 5%;
+background-color: #fff;
 overflow:auto;
 font-size:10px;
 `

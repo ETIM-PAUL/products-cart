@@ -2,10 +2,10 @@ import styled from "styled-components"
 
 export const DetailsContainer = styled.div`
   display:flex;
+  width:90%;
   justify-content: space-between;
-  width: 90%;
-  margin: 25px auto;
-  padding: 15px;
+  margin:  auto;
+  padding-top: 6rem;
 `
 export const ProductImages = styled.div`
   width:15%;
@@ -13,8 +13,8 @@ export const ProductImages = styled.div`
 `
 export const ProductImage = styled.div`
   width:50%;
-  height:100vh;
-  margin-left:30px;
+  display:flex;
+  justify-content:center;
 `
 export const ImageHover = styled.img`
   width:150px;
@@ -74,7 +74,11 @@ cursor: pointer;
 &:hover{
 border: 1px solid red;
 };
+&:focus{
+  border: 1px solid red;
+  };
 `
+
 
 export const AttributeButton = styled.button`
   height: 30px;
@@ -96,7 +100,7 @@ export const AttributeButton = styled.button`
 
 `
 export const AddButton = styled.button`
-width: 100%;
+width: 90%;
 height: 35px;
 color: #fff;
 background-color: #5ECE7B;

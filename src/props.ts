@@ -9,6 +9,9 @@ export type CartProps = {
     changeImageUp: any;
     changeImageDown: any;
 }
+export interface CartOverlayProps extends CartProps  {
+  display:any
+}
 
 export type ProductDetailsProps = {
 params: { id: string };

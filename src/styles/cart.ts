@@ -4,7 +4,7 @@ export const CartContainer = styled.div`
   width: 90%;
   margin: auto;
   background-color: #fff;
-  padding: 15px;
+  padding-top: 6rem;
 `
 
 export const Span = styled.span`
@@ -39,14 +39,14 @@ display: flex;
 gap: 10px;
 `
 export const AttributesContainer = styled.div`
-height: 175px;
-overflow:scroll;
+height: 183px;
+overflow:auto;
 `
 
 export const AttributeButton = styled.button`
-  height: 30px;
+  height: 20px;
   background-color: #fff;
-  width: 52px;
+  width: 30px;
   border: 1px solid black;
   text-align: center;
   justify-content: center;
