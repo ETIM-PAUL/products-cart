@@ -27,5 +27,6 @@ export type TopNavProps = {
   totalQuantity: number;
   setTotalPrice: any;
   currency: string
+  category: string
   onClickOutside:any
 }

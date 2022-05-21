@@ -17,6 +17,7 @@ export type CartTypes = {
 
 export type CardPropsTypes = {
   name: string;
+  brand: string;
   id:string;
   prices: any;
   gallery: ["strings"];

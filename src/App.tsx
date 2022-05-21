@@ -5,8 +5,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import ProductDetails from "./components/Product-Details";
 import Cart from "./components/Cart/Cart";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 export const client = new ApolloClient({
   uri: "http://localhost:4000/",
@@ -16,7 +14,6 @@ export const client = new ApolloClient({
 function App() {
   return (
     <>
-      <ToastContainer />
       <Router>
         <TopNav />
         <Routes>

@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import createRoot from "react-dom";
 import App from "./App";
 import { Provider } from "react-redux";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
@@ -13,7 +13,7 @@ const client = new ApolloClient({
 
 store.dispatch(getTotals());
 
-ReactDOM.render(
+createRoot.render(
   <React.StrictMode>
     <Provider store={store}>
       <ApolloProvider client={client}>

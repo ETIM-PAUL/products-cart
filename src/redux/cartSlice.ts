@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
-
 
 const initialState = {
   cartItems: localStorage.getItem("cartItems")
@@ -10,57 +8,74 @@ const initialState = {
   cartTotalAmount: 0,
 };
 
+const compareItemAttributes = (attribute1:any, attribute2:any) => {
+  const keys1 = Object.keys(attribute1);
+  const keys2 = Object.keys(attribute2);
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+  for (let key of keys1) {
+    if (attribute1[key] !== attribute2[key]) {
+      return false;
+    }
+  }
+  return true;
+};
+
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     addToCart: (state, {payload,type}) => {
-      const existingIndex = state.cartItems.findIndex(
+      // console.log(payload)
+      const exist = state.cartItems.find(
         (item:any) => item.id === payload.product.id
-      );
-
-      if (existingIndex >= 0) {
-        state.cartItems[existingIndex] = {
-          ...state.cartItems[existingIndex],
-          cartQuantity: state.cartItems[existingIndex].cartQuantity += 1,
-        };
-        toast.info(`${payload.product.name} quantity increased`, {
-          position: "top-center",
-        })
-      } else {
-        let tempProductItem = { ...payload.product, cartQuantity: 1, imageIndex: 0,selectedAttributes:payload.attr };
+        );
+        if (exist) {
+          const existingItemIndex = state.cartItems.findIndex(
+            (item:any) => item.id === payload.product.id && compareItemAttributes(item.selectedAttributes,payload.attribute)
+          );
+          const existingItem = state.cartItems.find(
+            (item:any) => item.id === payload.product.id && compareItemAttributes(item.selectedAttributes,payload.attribute)
+            );
+        if(!existingItem) 
+        { 
+          let tempProductItem = { ...payload.product, cartQuantity: 1, imageIndex: 0,selectedAttributes:payload.attribute };
+          state.cartItems.push(tempProductItem);
+        } else 
+        if( existingItem){ 
+          state.cartItems[existingItemIndex] = {
+            ...state.cartItems[existingItemIndex],
+            cartQuantity: state.cartItems[existingItemIndex].cartQuantity += 1,
+          };
+        }
+      } 
+      else {
+        let tempProductItem = { ...payload.product, cartQuantity: 1, imageIndex: 0,selectedAttributes:payload.attribute };
         state.cartItems.push(tempProductItem);
-        toast.success(`${payload.product.name} added to cart`, {
-          position: "top-center",
-        })
       }
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
+    
     decreaseCart(state, {payload, type}) {
       const itemIndex = state.cartItems.findIndex(
-        (item:any) => item.id === payload.id
-      );
-
-      if (state.cartItems[itemIndex].cartQuantity > 1) {
-        state.cartItems[itemIndex].cartQuantity -= 1;
-
-        toast.info(`${payload.name} quantity decreased in cart`, {
-          position: "top-center",
-      })
-      } else if (state.cartItems[itemIndex].cartQuantity === 1) {
-        const nextCartItems = state.cartItems.filter(
-          (item:any) => item.id !== payload.id
+        (item:any) => item.id === payload.product.id && compareItemAttributes(item.selectedAttributes,payload.attribute)
         );
-
+        if(itemIndex > -1 ){
+          if (state.cartItems[itemIndex].cartQuantity > 1) {
+            state.cartItems[itemIndex].cartQuantity -= 1;
+          } else if (state.cartItems[itemIndex].cartQuantity === 1) {
+        //  state.cartItems.splice(itemIndex)
+         const nextCartItems = state.cartItems.filter(
+          (item:any) => state.cartItems.indexOf(item) !== itemIndex
+        );
+  
         state.cartItems = nextCartItems;
-
-        toast.error(`${payload.name} removed from cart`, {
-          position: "top-center",
-        })
-      }
-      
+        }      
+        }
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
+    
     getTotals(state) {
       let totalPrice = 0;
       let total = 0
@@ -87,7 +102,7 @@ const cartSlice = createSlice({
 
       changeImageIndexUp(state, {payload,type}) {
         const existingIndex = state.cartItems.findIndex(
-          (item:any) => item.id === payload.id
+          (item:any) => item.id === payload.id && compareItemAttributes(item.selectedAttributes,payload.selectedAttributes)
         );
         
         if (existingIndex >= 0) {
@@ -103,7 +118,7 @@ const cartSlice = createSlice({
 
       changeImageIndexDown(state, {payload,type}) {
         const existingIndex = state.cartItems.findIndex(
-          (item:any) => item.id === payload.id
+          (item:any) => item.id === payload.id && compareItemAttributes(item.selectedAttributes,payload.selectedAttributes)
         );
         if (existingIndex >= 0) {
          if(state.cartItems[existingIndex].imageIndex > 0){

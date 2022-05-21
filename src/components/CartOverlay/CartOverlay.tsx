@@ -1,13 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-
-import {
-  addToCart,
-  changeImageIndexDown,
-  changeImageIndexUp,
-  decreaseCart,
-  getTotals,
-} from "../../redux/cartSlice";
 import {
   Attribute,
   AttributeButton,
@@ -27,12 +19,23 @@ import {
   AttributeSwatch,
   ItemsCart,
   CartDiv,
+  AttributesBanner,
 } from "../../styles/cartOverlay";
 import { CartTypes, ItemProps } from "../../types";
-import { FaLessThan, FaGreaterThan } from "react-icons/fa";
+import greaterThan from "../../img/greaterThan.svg";
+import lessThan from "../../img/lessThan.svg";
 import { Link } from "react-router-dom";
-import { Bold, GalleryDiv, NoStyleDiv, Paragraph } from "../../styles/cart";
+import {
+  Bold,
+  ChangeImages,
+  GalleryDiv,
+  NoStyleDiv,
+  Paragraph,
+} from "../../styles/cart";
 import { CartOverlayProps } from "../../props";
+import { ProductBrand, ProductName } from "../../styles/cart";
+import "../Product-Details/details.css";
+import { mapStateToProps, mapDispatchToProps } from "./utils";
 
 class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
   constructor(props: any) {
@@ -43,25 +46,24 @@ class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
     };
   }
 
-  decreaseCartItemQuantity(item: {}) {
-    this.props.decreaseCart(item);
+  increaseCartItemQuantity(product: {}, attribute: any) {
+    this.props.addToCart({ product, attribute });
     this.props.getTotals();
   }
 
-  increaseCartItemQuantity(product: {}) {
-    this.props.addToCart({ product });
+  decreaseCartItemQuantity(product: {}, attribute: any) {
+    this.props.decreaseCart({ product, attribute });
     this.props.getTotals();
   }
 
-  componentDidMount() {}
   static getDerivedStateFromProps(props: any, state: any) {
     if (props.cart !== state.cartItems) {
       return {
         cartItems: props.cart,
       };
     }
-    return null;
   }
+
   render() {
     return (
       <>
@@ -75,8 +77,8 @@ class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
                 <NoStyleDiv key={item.id}>
                   <CartOverlayBanner key={item.id}>
                     <ItemsCart>
-                      <Paragraph>{item.name}</Paragraph>
-                      <Paragraph>{item.brand}</Paragraph>
+                      <ProductBrand>{item.brand}</ProductBrand>
+                      <ProductName>{item.name}</ProductName>
                       {item.prices?.map(
                         (p) =>
                           p.currency.symbol === this.props.currency && (
@@ -89,7 +91,7 @@ class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
                           )
                       )}
 
-                      <NoStyleDiv>
+                      <AttributesBanner>
                         {item.attributes.map((attr: any) => (
                           <NoStyleDiv key={attr.id}>
                             <Attribute>{attr.name}:</Attribute>
@@ -98,15 +100,11 @@ class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
                                 attr.items.map((attribute: any) => (
                                   <AttributeButton
                                     key={attribute.id}
-                                    style={
-                                      item.selectedAttributes.find(
-                                        (x: any) =>
-                                          x.attr === attr.id &&
-                                          x.itm.id === attribute.id
-                                      ) && {
-                                        backgroundColor: "black",
-                                        color: "white",
-                                      }
+                                    className={
+                                      attribute.id ===
+                                      item.selectedAttributes[attr.name]
+                                        ? "selected"
+                                        : null
                                     }
                                   >
                                     {attribute.value}
@@ -116,67 +114,77 @@ class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
                                 attr.items.map((attribute: any) => (
                                   <AttributeSwatch
                                     key={attribute.id}
-                                    style={
-                                      item.selectedAttributes.find(
-                                        (x: any) =>
-                                          x.attr === attr.id &&
-                                          x.itm.id === attribute.id
-                                      )
-                                        ? {
-                                            backgroundColor: `${attribute.id}`,
-                                            border: "2px solid red",
-                                          }
-                                        : {
-                                            backgroundColor: `${attribute.id}`,
-                                          }
+                                    className={
+                                      attribute.id ===
+                                      item.selectedAttributes[attr.name]
+                                        ? "swatchSelected"
+                                        : null
                                     }
+                                    style={{
+                                      backgroundColor: `${attribute.id}`,
+                                    }}
                                   ></AttributeSwatch>
                                 ))}
                             </CartAttributes>
                           </NoStyleDiv>
                         ))}
-                      </NoStyleDiv>
+                      </AttributesBanner>
                     </ItemsCart>
                     <OverlaySide>
                       <ItemQuantityChange>
                         <Button
-                          onClick={() => this.increaseCartItemQuantity(item)}
+                          onClick={() =>
+                            this.increaseCartItemQuantity(
+                              item,
+                              item.selectedAttributes
+                            )
+                          }
                         >
-                          <span style={{ fontSize: "15px" }}>+</span>
+                          <span>+</span>
                         </Button>
                         <h4 style={{ textAlign: "center" }}>
                           {item.cartQuantity}
                         </h4>
                         <Button
-                          onClick={() => this.decreaseCartItemQuantity(item)}
+                          onClick={() =>
+                            this.decreaseCartItemQuantity(
+                              item,
+                              item.selectedAttributes
+                            )
+                          }
                         >
-                          <span style={{ fontSize: "15px" }}>-</span>
+                          <span>-</span>
                         </Button>
                       </ItemQuantityChange>
                       <CartOverlaySplit>
                         <img
                           src={item.gallery[item.imageIndex]}
-                          width={90}
-                          height={90}
-                          style={{ objectFit: "fill" }}
+                          width={100}
+                          height={127}
                           alt="itemImg"
                         />
                         <CartOverlayImage>
                           {item.gallery?.length > 1 && (
                             <GalleryDiv>
-                              <FaLessThan
-                                style={{
-                                  backgroundColor: "black",
-                                  color: "white",
-                                }}
-                                onClick={() => this.props.changeImageDown(item)}
+                              <ChangeImages
+                                src={lessThan}
+                                alt="changeImage"
+                                onClick={() =>
+                                  this.props.changeImageDown(
+                                    item,
+                                    item.selectedAttributes
+                                  )
+                                }
                               />
-                              <FaGreaterThan
-                                style={{
-                                  backgroundColor: "black",
-                                  color: "white",
-                                }}
-                                onClick={() => this.props.changeImageDown(item)}
+                              <ChangeImages
+                                src={greaterThan}
+                                alt="changeImage"
+                                onClick={() =>
+                                  this.props.changeImageUp(
+                                    item,
+                                    item.selectedAttributes
+                                  )
+                                }
                               />
                             </GalleryDiv>
                           )}
@@ -188,47 +196,28 @@ class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
                 </NoStyleDiv>
               ))
             ) : (
-              <NoStyleDiv>No Items in Cart</NoStyleDiv>
+              <NoStyleDiv>No Items in Cart, Yet.</NoStyleDiv>
             )}
           </CartDiv>
-          {this.props.cart?.length > 0 && (
-            <TotalAndButton>
-              <TotalDiv>
-                <Bold>Total</Bold>
-                <Bold>{this.props.totalAmount}</Bold>
-              </TotalDiv>
-              <ButtonDiv>
-                <Link to={"/cart"}>
-                  <ViewBag onClick={this.props.display}>VIEW BAG</ViewBag>
-                </Link>
-                <SecondButton>CHECK OUT</SecondButton>
-              </ButtonDiv>
-            </TotalAndButton>
-          )}
+          <TotalAndButton>
+            <TotalDiv>
+              <Bold>Total</Bold>
+              <Bold>
+                {this.props.currency}
+                {this.props.totalAmount}
+              </Bold>
+            </TotalDiv>
+            <ButtonDiv>
+              <Link to={"/cart"}>
+                <ViewBag onClick={this.props.display}>VIEW BAG</ViewBag>
+              </Link>
+              <SecondButton>CHECK OUT</SecondButton>
+            </ButtonDiv>
+          </TotalAndButton>
         </CartOverlayContainer>
       </>
     );
   }
-}
-
-function mapDispatchToProps(dispatch: any) {
-  return {
-    decreaseCart: (product: any) => dispatch(decreaseCart(product)),
-    addToCart: (product: any) => dispatch(addToCart(product)),
-    getTotals: () => dispatch(getTotals()),
-    changeImageUp: (item: any) => dispatch(changeImageIndexUp(item)),
-
-    changeImageDown: (item: any) => dispatch(changeImageIndexDown(item)),
-  };
-}
-
-function mapStateToProps(state: any) {
-  return {
-    cart: state.cart.cartItems,
-    totalQuantity: state.cart.cartTotalQuantity,
-    totalAmount: state.cart.cartTotalAmount,
-    currency: state.selection["selectedCurrency"],
-  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartOverlay);

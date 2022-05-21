@@ -6,26 +6,34 @@ export const FirstContainer = styled.div`
   width: 90%;
   height: 100vh;
   font-family: serif;
-  padding-top: 5rem ;
+  padding-top: 3.5rem ;
+font-family: "Raleway";
+
   
   `
-  export const Heading = styled.div`
+  export const Heading = styled.p`
   color: #000;
-  font-size: 20px;
-  padding-top: 2.5rem;
+  font-size: 30px;
+  padding-top: 10px;
+  text-transform: capitalize;
+width: 299px;
+// height: 68px;
+left: calc(50% - 299px/2 - 469.5px);
+top: calc(50% - 68px/2 - 562.5px);
   `
   export const CardsDiv = styled.div`
   
   `;
   
   export const CardsContainer = styled.div`
-  display: inline-flex;
+  display: flex;
   margin: auto;
-  gap: 18px;
+  gap: 30px;
   justify-content: center;
   flex-wrap: wrap;
   padding-top: 3rem;
   padding-bottom: 3rem ;
+  align-items: flex-start;
 `;
 
 export const Banner = styled.div`
@@ -61,14 +69,23 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 `;
 
-export const CardTitle = styled.div`
-color: #80808091;
- padding: 5px;
+export const CardTitle = styled.span`
+color: #1d1f22;
 `;
 
-export const ProductPrice = styled.p`
+export const ProductPrice = styled.span`
+font-weight:400;
+`;
+
+export const ProductInfo = styled.div`
+font-weight: 300;
+font-size: 18px;
 color: #000;
- padding: 5px;
+ padding: 3px;
+ margin: 8px;
+ display: grid;
+ line-height: 160%;
+ align-items: center;
 `;
 
 export const WaterMark = styled.span`

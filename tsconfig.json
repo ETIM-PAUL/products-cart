@@ -22,7 +22,7 @@
   },
   "include": [
     "src/*/*"
-, "queries.ts", "src/props.ts"  ],
+, "queries.ts", "src/props.ts", "'/custom.d.ts"  ],
 "types": [
   "node"
 ]

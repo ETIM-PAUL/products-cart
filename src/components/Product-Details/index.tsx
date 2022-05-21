@@ -21,11 +21,11 @@ import parse from "html-react-parser";
 import { ProductDetailsTypes } from "../../types";
 import { Get_Product } from "../../queries";
 import { connect } from "react-redux";
-import { addToCart, getTotals } from "../../redux/cartSlice";
 import { initialProduct } from "../../initialState";
-import { toast } from "react-toastify";
 import { NoStyleDiv } from "../../styles/cart";
 import { ProductDetailsProps } from "../../props";
+import "./details.css";
+import { mapDispatchToProps, mapStateToProps } from "./util";
 
 class ProductDetails extends React.Component<
   ProductDetailsProps,
@@ -36,34 +36,39 @@ class ProductDetails extends React.Component<
     this.state = {
       product: { ...initialProduct },
       imagePreview: "",
-      attributes: [],
+      attributes: {},
       attributesLength: 0,
       bgColor: "white",
       color: "black",
     };
   }
 
-  addProductToCart(product: { attributes: any }) {
-    let attr = this.state.attributes;
-    if (product?.attributes.length !== attr.length) {
-      toast("Please select an attribute for each attributes", {
-        position: "top-center",
-      });
-    } else if (product?.attributes.length === attr.length) {
-      this.props.addToCart({ product, attr });
-      this.props.getTotals();
-      this.setState({ attributes: [] });
-    }
+  addProductToCart(product: {}) {
+    let attribute = this.state.attributes;
+    console.log(attribute);
+    this.props.addToCart({ product, attribute });
+    this.props.getTotals();
+    this.predefinedAttributes();
   }
 
-  setAttributes(itm: {}, attr: string) {
+  setAttributes(itm: { id: string }, attr: string) {
     let attribute = this.state.attributes;
-    const existingAttribute = attribute.findIndex((a: any) => a.attr === attr);
-    if (existingAttribute >= 0) {
-      attribute.splice(existingAttribute, 1, { itm, attr });
-    } else {
-      attribute.push({ itm, attr });
-    }
+    let a = { [attr]: itm.id };
+    let ab = Object.assign(attribute, a);
+    this.setState({ attributes: ab });
+  }
+
+  predefinedAttributes() {
+    const attributeId = this.state.product.attributes.map((attr) => attr.id);
+    const itemAttributes = this.state.product.attributes.map((attr) => attr);
+    const attribute = itemAttributes.map((itm) => itm.items[0].id);
+    let ab = {};
+    attributeId.forEach((value1, index) => {
+      const value2 = attribute[index];
+      let a = { [value1]: value2 };
+      ab = Object.assign(ab, a);
+    });
+    this.setState({ attributes: ab });
   }
 
   componentDidMount() {
@@ -72,8 +77,8 @@ class ProductDetails extends React.Component<
       this.setState({
         product: res.data.product,
         imagePreview: res.data.product.gallery[0],
-        attributesLength: res.data.product.attributes.length,
       });
+      this.predefinedAttributes();
     });
   }
 
@@ -82,111 +87,107 @@ class ProductDetails extends React.Component<
       USE_PROFILES: { html: true },
     });
     return (
-      <>
-        <DetailsContainer>
-          <>
-            <ProductImages>
-              {this.state.product &&
-                this.state.product.gallery?.map((img) => (
-                  <ImageHover
-                    key={img}
-                    src={img}
-                    alt="product-img"
-                    onMouseOver={() => this.setState({ imagePreview: img })}
-                  />
-                ))}
-            </ProductImages>
-
-            <ProductImage>
-              <img
-                src={this.state.imagePreview}
-                alt="product-preview"
-                height={500}
-                width={400}
-              />
-            </ProductImage>
-
-            <ProductInfo>
-              <NoStyleDiv>
-                <ProductBrand>{this.state.product.brand}</ProductBrand>
-                <ProductName>{this.state.product.name}</ProductName>
-              </NoStyleDiv>
-
-              {this.state.product.attributes.map((attr) => (
-                <NoStyleDiv key={attr.id}>
-                  <Attribute>{attr.name}:</Attribute>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                    }}
-                  >
-                    {attr.type === "swatch" &&
-                      attr.items.map((itm) => (
-                        <AttributeSwatch
-                          key={itm.id}
-                          style={{
-                            backgroundColor: `${itm.id}`,
-                          }}
-                          onClick={() => this.setAttributes(itm, attr.id)}
-                        />
-                      ))}
-
-                    {attr.type !== "swatch" &&
-                      attr.items.map((itm) => (
-                        <AttributeButton
-                          key={itm.id}
-                          onClick={() => this.setAttributes(itm, attr.id)}
-                        >
-                          {itm.value}
-                        </AttributeButton>
-                      ))}
-                  </div>
-                </NoStyleDiv>
+      <DetailsContainer>
+        <>
+          <ProductImages>
+            {this.state.product.gallery.length >= 1 &&
+              this.state.product.gallery?.map((img) => (
+                <ImageHover
+                  key={img}
+                  src={img}
+                  alt="product-img"
+                  onMouseOver={() => this.setState({ imagePreview: img })}
+                  style={{ outline: "2px solid green;" }}
+                />
               ))}
+          </ProductImages>
 
-              <Attribute>PRICE:</Attribute>
-              {this.state.product.prices.map(
-                (p) =>
-                  p.currency.symbol === this.props.currency && (
-                    <ProductPrice key={p.currency.symbol}>
-                      {p.currency.symbol}
-                      {p.amount}
-                    </ProductPrice>
-                  )
-              )}
+          <ProductImage>
+            <img
+              src={this.state.imagePreview}
+              alt="product-img-preview"
+              height={500}
+              width={400}
+            />
+          </ProductImage>
 
-              {this.state.product.inStock === true && (
-                <AddButton
-                  type="submit"
-                  onClick={() => this.addProductToCart(this.state.product)}
+          <ProductInfo>
+            <NoStyleDiv>
+              <ProductBrand>{this.state.product.brand}</ProductBrand>
+              <ProductName>{this.state.product.name}</ProductName>
+            </NoStyleDiv>
+
+            {this.state.product.attributes.map((attr) => (
+              <NoStyleDiv key={attr.id}>
+                <Attribute>{attr.name}:</Attribute>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                  }}
                 >
-                  ADD TO CART
-                </AddButton>
-              )}
-              {this.state.product.inStock !== true && (
-                <OutOfStock type="button">OUT OF STOCK</OutOfStock>
-              )}
-              <ProductParse>{parse(cleanHTML)}</ProductParse>
-            </ProductInfo>
-          </>
-        </DetailsContainer>
-      </>
+                  {attr.type === "swatch" &&
+                    attr.items.map((itm) => (
+                      <AttributeSwatch
+                        key={itm.id}
+                        className={
+                          itm.id === this.state.attributes[attr.name]
+                            ? "swatchSelected"
+                            : null
+                        }
+                        style={{
+                          backgroundColor: `${itm.id}`,
+                        }}
+                        onClick={() => this.setAttributes(itm, attr.name)}
+                      />
+                    ))}
+
+                  {attr.type !== "swatch" &&
+                    attr.items.map((itm) => (
+                      <AttributeButton
+                        key={itm.id}
+                        className={
+                          itm.id === this.state.attributes[attr.name]
+                            ? "selected"
+                            : null
+                        }
+                        onClick={() => this.setAttributes(itm, attr.name)}
+                      >
+                        {itm.value}
+                      </AttributeButton>
+                    ))}
+                </div>
+              </NoStyleDiv>
+            ))}
+
+            <Attribute>PRICE:</Attribute>
+            {this.state.product.prices.map(
+              (p) =>
+                p.currency.symbol === this.props.currency && (
+                  <ProductPrice key={p.currency.symbol}>
+                    {p.currency.symbol}
+                    {p.amount}
+                  </ProductPrice>
+                )
+            )}
+
+            {this.state.product.inStock === true && (
+              <AddButton
+                type="submit"
+                onClick={() => this.addProductToCart(this.state.product)}
+              >
+                ADD TO CART
+              </AddButton>
+            )}
+            {this.state.product.inStock !== true && (
+              <OutOfStock type="button">OUT OF STOCK</OutOfStock>
+            )}
+            <ProductParse>{parse(cleanHTML)}</ProductParse>
+          </ProductInfo>
+        </>
+      </DetailsContainer>
     );
   }
 }
-
-function mapStateToProps(state: any) {
-  return {
-    currency: state.selection["selectedCurrency"],
-  };
-}
-function mapDispatchToProps(dispatch: any) {
-  return {
-    addToCart: (product: any) => dispatch(addToCart(product)),
-    getTotals: () => dispatch(getTotals()),
-  };
-}
-
 const Prop = (props: any) => <ProductDetails {...props} params={useParams()} />;
 export default connect(mapStateToProps, mapDispatchToProps)(Prop);

@@ -9,17 +9,18 @@ import {
   Cart,
   Banner,
   ProductPrice,
+  ProductInfo,
 } from "../../styles/productsListing";
 import { connect } from "react-redux";
 import { CardPropsTypes } from "../../types";
-import { BsCart } from "react-icons/bs";
+import cart from "../../img/cart.svg";
 import { Link } from "react-router-dom";
 import { Get_ProductList } from "../../queries";
 import { addToCart, getTotals } from "../../redux/cartSlice";
 
 class ProductsListing extends React.Component<
   { category: string; currency: string; addToCart: any; getTotals: any },
-  { products: []; category: string; currency: string; attribute: any }
+  { products: []; category: string; currency: string }
 > {
   constructor(props: any) {
     super(props);
@@ -27,21 +28,27 @@ class ProductsListing extends React.Component<
       products: [],
       category: this.props.category,
       currency: this.props.currency,
-      attribute: [],
     };
   }
 
-  addProductToCart(product: {}, attribute: any) {
-    attribute.forEach((element: any) => {
-      let itm = element.items[0];
-      let attr = element.id;
-      this.state.attribute.push({ itm, attr });
-    });
-    let attr = this.state.attribute;
-    this.props.addToCart({ product, attr });
-    this.setState({ attribute: [] });
+  addProductToCart(product) {
+    let attribute = {};
+    function predefinedAttributes() {
+      const attributeId = product.attributes.map((attr: any) => attr.id);
+      const itemAttributes = product.attributes.map((attr) => attr);
+      const attr = itemAttributes.map((itm: any) => itm.items[0].id);
+      attributeId.forEach((value1, index) => {
+        const value2 = attr[index];
+        let a = { [value1]: value2 };
+        attribute = Object.assign(attribute, a);
+      });
+    }
+    predefinedAttributes();
+    console.log(product);
+    this.props.addToCart({ product, attribute });
     this.props.getTotals();
   }
+
   componentDidMount() {
     let category = this.props.category;
     try {
@@ -71,7 +78,7 @@ class ProductsListing extends React.Component<
   render() {
     return (
       <FirstContainer>
-        <Heading>{this.props.category?.toUpperCase()} CATEGORY</Heading>
+        <Heading>{this.props.category}</Heading>
         <CardsContainer>
           {this.state.products?.length >= 0 &&
             this.state.products.map((x: CardPropsTypes) => (
@@ -83,15 +90,12 @@ class ProductsListing extends React.Component<
                       height={320}
                       width={400}
                       alt="Product Img"
-                      style={{ objectFit: "fill" }}
                     />
                     {x.inStock === false && <WaterMark>Out of stock</WaterMark>}
                   </Link>
                   {x.inStock === true && (
-                    <Cart
-                      onClick={() => this.addProductToCart(x, x.attributes)}
-                    >
-                      <BsCart />
+                    <Cart onClick={() => this.addProductToCart(x)}>
+                      <img src={cart} alt="add product" />
                     </Cart>
                   )}
                 </Banner>
@@ -99,19 +103,20 @@ class ProductsListing extends React.Component<
                   to={`/product/${x.id}`}
                   style={{ textDecoration: "none" }}
                 >
-                  <CardTitle>{x.name}</CardTitle>
-                  <ProductPrice style={{ padding: "5px", color: "black" }}>
+                  <ProductInfo>
+                    <CardTitle>
+                      {x.brand} ~ {x.name}
+                    </CardTitle>
                     {x.prices.map(
                       (p: any) =>
                         p.currency.symbol === this.props.currency && (
-                          <p key={p.currency.symbol}>
+                          <ProductPrice key={p.currency.symbol}>
                             {p.currency.symbol}
                             {p.amount}
-                          </p>
+                          </ProductPrice>
                         )
                     )}
-                    <br />
-                  </ProductPrice>
+                  </ProductInfo>
                 </Link>
               </Card>
             ))}
