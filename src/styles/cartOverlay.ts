@@ -9,6 +9,8 @@ padding-top: 10px;
 export const CartAttributes = styled.div`
 display: flex;
 gap: 3px;
+padding-left:2px;
+
 `
 export const AttributesBanner = styled.div`
 // height:90px;
@@ -46,10 +48,11 @@ align-items: center;
 display:flex;
 `;
 
-export const AttributeSwatch = styled.div`
+export const AttributeSwatch = styled.div.attrs((props: {color: string}) => props)`
 height: 18px;
 width: 20px;
 border: 1px solid black;
+background-color: ${(props) => props.color};
 `
 
 export const CartOverlaySplit = styled.div`

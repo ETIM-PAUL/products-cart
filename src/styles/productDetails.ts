@@ -83,7 +83,7 @@ font-family:"Roboto Condensed";
 
 `
 
-export const AttributeSwatch = styled.div`
+export const AttributeSwatch = styled.div.attrs((props: {color: string}) => props)`
 height: 20px;
 width: 20px;
 border: 1px solid black;
@@ -91,6 +91,7 @@ cursor: pointer;
   display:flex;
 justify-content: center;
 align-items:center;
+background-color: ${(props) => props.color};
 `
 export const AttributeStyle = styled.div`
 display:flex;

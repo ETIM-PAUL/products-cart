@@ -114,6 +114,7 @@ class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
                               {attr.type === "swatch" &&
                                 attr.items.map((attribute: any) => (
                                   <AttributeSwatch
+                                    color={`${attribute.id}`}
                                     key={attribute.id}
                                     className={
                                       attribute.id ===
@@ -121,9 +122,6 @@ class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
                                         ? "swatchSelected"
                                         : null
                                     }
-                                    style={{
-                                      backgroundColor: `${attribute.id}`,
-                                    }}
                                   ></AttributeSwatch>
                                 ))}
                             </CartAttributes>

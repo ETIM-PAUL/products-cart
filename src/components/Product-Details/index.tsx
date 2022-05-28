@@ -123,15 +123,13 @@ class ProductDetails extends React.Component<
                   {attr.type === "swatch" &&
                     attr.items.map((itm) => (
                       <AttributeSwatch
+                        color={`${itm.id}`}
                         key={itm.id}
                         className={
                           itm.id === this.state.attributes[attr.name]
                             ? "swatchSelected"
                             : null
                         }
-                        style={{
-                          backgroundColor: `${itm.id}`,
-                        }}
                         onClick={() => this.setAttributes(itm, attr.name)}
                       />
                     ))}
