@@ -11,7 +11,7 @@ display: flex;
 gap: 3px;
 `
 export const AttributesBanner = styled.div`
-height:90px;
+// height:90px;
 `
 
 export const Attribute = styled.span`
@@ -62,15 +62,7 @@ justify-content: space-between;
 margin-bottom: 15px;
 `
 export const ItemsCart = styled.div`
-height: 150px;
 width: 100%;
-overflow: auto;
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent; /* make scrollbar transparent */
-};
-scrollbar-width: none;
--ms-overflow-style: none; 
 `
 
 export const CartDiv = styled.div`
@@ -95,6 +87,8 @@ top: 84%;
 export const OverlaySide = styled.div`
 display: flex;
 gap: 5px;
+justify-content: center;
+align-items: center;
 `
 export const ItemQuantityChange = styled.div`
 line-height: 33px;

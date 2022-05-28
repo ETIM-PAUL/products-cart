@@ -14,6 +14,7 @@ import {
   OutOfStock,
   ProductParse,
   ImageHover,
+  AttributeStyle,
 } from "../../styles/productDetails";
 import { useParams } from "react-router";
 import DOMPurify from "dompurify";
@@ -38,8 +39,6 @@ class ProductDetails extends React.Component<
       imagePreview: "",
       attributes: {},
       attributesLength: 0,
-      bgColor: "white",
-      color: "black",
     };
   }
 
@@ -97,7 +96,6 @@ class ProductDetails extends React.Component<
                   src={img}
                   alt="product-img"
                   onMouseOver={() => this.setState({ imagePreview: img })}
-                  style={{ outline: "2px solid green;" }}
                 />
               ))}
           </ProductImages>
@@ -107,7 +105,8 @@ class ProductDetails extends React.Component<
               src={this.state.imagePreview}
               alt="product-img-preview"
               height={500}
-              width={400}
+              width={600}
+              // style={{ width: "80px" }}
             />
           </ProductImage>
 
@@ -120,12 +119,7 @@ class ProductDetails extends React.Component<
             {this.state.product.attributes.map((attr) => (
               <NoStyleDiv key={attr.id}>
                 <Attribute>{attr.name}:</Attribute>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "10px",
-                  }}
-                >
+                <AttributeStyle>
                   {attr.type === "swatch" &&
                     attr.items.map((itm) => (
                       <AttributeSwatch
@@ -156,7 +150,7 @@ class ProductDetails extends React.Component<
                         {itm.value}
                       </AttributeButton>
                     ))}
-                </div>
+                </AttributeStyle>
               </NoStyleDiv>
             ))}
 

@@ -61,6 +61,7 @@ top: 93.5%;
 
 export const Card = styled.div`
 flex: 0 1 calc(32% - 1em);
+position:relative;
 &:hover{
 box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
@@ -70,7 +71,12 @@ box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 `;
 
 export const CardTitle = styled.span`
-color: #1d1f22;
+color: #1D1F22;
+`;
+
+export const CardSubTitle = styled.span`
+color: #000;
+font-weight:500;
 `;
 
 export const ProductPrice = styled.span`
@@ -100,5 +106,15 @@ justify-content: center;
 align-content: center;
 opacity: 3;
 font-variant-caps: all-small-caps;
+
+`
+export const OverlayStyle = styled.span`
+position: absolute;
+top: 0%;
+width:100%;
+height:405px;
+display: grid;
+opacity: 0.5;
+background-color:white;
 
 `

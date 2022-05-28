@@ -25,6 +25,7 @@ import {
   OrderText,
   ChangeImages,
   AttributesFlex,
+  Heading2,
 } from "../../styles/cart";
 import { CartTypes, ItemProps } from "../../types";
 import { CartProps } from "../../props";
@@ -138,7 +139,7 @@ class Cart extends React.Component<CartProps, CartTypes> {
                     >
                       <span>+</span>
                     </ChangeItemQuantity>
-                    <h4 style={{ textAlign: "center" }}>{item.cartQuantity}</h4>
+                    <Heading2>{item.cartQuantity}</Heading2>
                     <ChangeItemQuantity
                       onClick={() =>
                         this.decreaseCartItemQuantity(

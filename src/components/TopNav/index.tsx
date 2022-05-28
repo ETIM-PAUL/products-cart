@@ -25,11 +25,13 @@ import { Get_Category, Get_Currency } from "../../queries";
 import CartOverlay from "../CartOverlay/CartOverlay";
 import logo from "../../img/alogo.png";
 import arrow from "../../img/arrowDown.png";
+import arrowUp from "../../img/arrowUp.png";
 import cart from "../../img/cart.svg";
 import { NoStyleDiv } from "../../styles/cart";
 import { Link } from "react-router-dom";
 import { TopNavProps } from "../../props";
 import { mapDispatchToProps, mapStateToProps } from "./util";
+import { initialNav } from "../../initialState";
 
 class TopNav extends React.Component<TopNavProps, TopNavTypes> {
   ref: React.RefObject<HTMLDivElement>;
@@ -40,16 +42,7 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
     this.ref2 = React.createRef();
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.handleClickOut = this.handleClickOut.bind(this);
-    this.state = {
-      products: [],
-      categories: [],
-      category: "",
-      currencies: [],
-      currency: "",
-      currencySymbol: "",
-      currencySwitchDisplay: false,
-      cartOverlayDisplay: false,
-    };
+    this.state = initialNav;
   }
   handleClickOutside(event) {
     if (this.ref.current && !this.ref.current.contains(event.target)) {
@@ -175,7 +168,11 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
             <SingleIcon ref={this.ref}>
               <CurrencySwitcher onClick={() => this.showCurrency()}>
                 {this.props.currency}
-                <Arrow src={arrow} alt="" />
+                {this.state.currencySwitchDisplay ? (
+                  <Arrow src={arrowUp} alt="" />
+                ) : (
+                  <Arrow src={arrow} alt="" />
+                )}
               </CurrencySwitcher>
 
               {this.state.currencySwitchDisplay && (

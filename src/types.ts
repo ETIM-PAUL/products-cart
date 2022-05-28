@@ -30,8 +30,6 @@ product: Product;
 imagePreview: string;
 attributes: any;
 attributesLength: number;
-bgColor:string;
-color:string;
 }
 
 export interface Product {

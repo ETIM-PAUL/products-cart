@@ -15,7 +15,11 @@ export const ProductImages = styled.div`
   object-fit:cover;
   `
   export const ProductImage = styled.div`
-  display:block;
+  display:grid;
+  // width: 30%;
+  // object-fit:cover;
+  margin-left:05px;
+
   `
   export const ImageHover = styled.img`
   height:80px;
@@ -29,9 +33,9 @@ export const ProductImages = styled.div`
   object-fit: cover;
 `
 export const ProductInfo = styled.div`
-  // width:35%;
+  width:100vmin;
   height:100vh;
-  margin-left:30px;
+  margin-left:05px;
   color:#1D1F22;
 `
 export const ProductBrand = styled.div`
@@ -56,14 +60,14 @@ align-items: center;
 
 export const ProductParse = styled.div`
 font-family:"Roboto";
-height:300px;
-overflow:auto;
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent; /* make scrollbar transparent */
-};
-scrollbar-width: none;
--ms-overflow-style: none; 
+// height:300px;
+// overflow:auto;
+// ::-webkit-scrollbar {
+//   width: 0px;
+//   background: transparent; /* make scrollbar transparent */
+// };
+// scrollbar-width: none;
+// -ms-overflow-style: none; 
 `
 
 export const ProductPrice = styled.div`
@@ -88,7 +92,10 @@ cursor: pointer;
 justify-content: center;
 align-items:center;
 `
-
+export const AttributeStyle = styled.div`
+display:flex;
+gap:10px;
+`
 
 export const AttributeButton = styled.div`
   height: 30px;
@@ -106,7 +113,7 @@ align-items:center;
   };
 `
 export const AddButton = styled.button`
-width: 100%;
+width: 20rem;
 height: 35px;
 color: #fff;
 background-color: #5ECE7B;
@@ -120,7 +127,7 @@ margin-bottom:20px;
 }
 `
 export const OutOfStock = styled.button`
-width: 100%;
+width: 20rem;
 height: 35px;
 color: #fff;
 background-color: #5ECE7B;

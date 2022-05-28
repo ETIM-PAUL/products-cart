@@ -29,6 +29,7 @@ import {
   Bold,
   ChangeImages,
   GalleryDiv,
+  Heading2,
   NoStyleDiv,
   Paragraph,
 } from "../../styles/cart";
@@ -142,9 +143,7 @@ class CartOverlay extends React.Component<CartOverlayProps, CartTypes> {
                         >
                           <span>+</span>
                         </Button>
-                        <h4 style={{ textAlign: "center" }}>
-                          {item.cartQuantity}
-                        </h4>
+                        <Heading2>{item.cartQuantity}</Heading2>
                         <Button
                           onClick={() =>
                             this.decreaseCartItemQuantity(

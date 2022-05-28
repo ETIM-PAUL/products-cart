@@ -1,4 +1,5 @@
-import { Product } from "./types";
+import { TopNavProps } from "./props";
+import { Product, TopNavTypes } from "./types";
 
 export const initialProduct: Product = {
   id: "",
@@ -32,3 +33,14 @@ export const initialProduct: Product = {
     },
   ],
 };
+
+export const initialNav:TopNavTypes = {
+  products: [],
+      categories: [],
+      category: "",
+      currencies: [],
+      currency: "",
+      currencySymbol: "",
+      currencySwitchDisplay: false,
+      cartOverlayDisplay: false,
+}

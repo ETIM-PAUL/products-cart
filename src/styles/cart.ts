@@ -14,6 +14,9 @@ font-weight:300;
 `
 export const Heading = styled.h3`
 `
+export const Heading2 = styled.h4`
+text-align:center;
+`
 export const NoStyleDiv = styled.div`
 `
 export const Paragraph = styled.p`
@@ -64,19 +67,13 @@ display: flex;
 gap: 10px;
 `
 export const AttributesFlex = styled.div`
-height:100px;
+// height:100px;
 width: 180px;
 `
 export const AttributesContainer = styled.div`
-height: 163px;
-overflow:auto;
+
 line-height:25px;
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent; /* make scrollbar transparent */
-};
-scrollbar-width: none;
--ms-overflow-style: none; 
+
 `
 
 export const AttributeButton = styled.div`
