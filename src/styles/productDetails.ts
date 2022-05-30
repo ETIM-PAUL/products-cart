@@ -7,7 +7,6 @@ export const DetailsContainer = styled.div`
   margin: auto;
   font-family: Raleway;
   padding-top: 6rem;
-  // position:fixed;
 `
 export const ProductImages = styled.div`
   height:30px;
@@ -16,8 +15,6 @@ export const ProductImages = styled.div`
   `
   export const ProductImage = styled.div`
   display:grid;
-  // width: 30%;
-  // object-fit:cover;
   margin-left:05px;
 
   `
@@ -39,58 +36,109 @@ export const ProductInfo = styled.div`
   color:#1D1F22;
 `
 export const ProductBrand = styled.div`
-font-size: 30px;
-font-weight: 600;
-line-height: 27px;
 letter-spacing: 0em;
 text-align: left;
 display: flex;
 align-items: center;
+width: 292px;
+height: 27px;
+
+font-family: 'Raleway';
+font-style: normal;
+font-weight: 600;
+font-size: 30px;
+line-height: 27px;
+
+display: flex;
+align-items: center;
+
+color: #1D1F22;
 `
 export const ProductName = styled.div`
-font-family: "Raleway";
-font-size: 15px;
-font-weight: 300;
-line-height: 27px;
 letter-spacing: 0em;
 text-align: left;
 display: flex;
+margin-top:15px;
+width: 292px;
+font-family: 'Raleway';
+font-style: normal;
+font-weight: 100;
+font-size: 30px;
+line-height: 27px;
+/* identical to box height, or 90% */
+display: flex;
 align-items: center;
+color: #1D1F22;
 `
 
 export const ProductParse = styled.div`
-font-family:"Roboto";
-// height:300px;
-// overflow:auto;
-// ::-webkit-scrollbar {
-//   width: 0px;
-//   background: transparent; /* make scrollbar transparent */
-// };
-// scrollbar-width: none;
-// -ms-overflow-style: none; 
+position: relative;
+width: 292px;
+height: 103px;
+font-family: 'Roboto';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+line-height: 159.96%;
+color: #1D1F22;
 `
 
 export const ProductPrice = styled.div`
-font-weight: 600;
+width: 86px;
+height: 46px;
+margin-top: 5px;
+font-family: 'Raleway';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 18px;
+display: flex;
+align-items: center;
+
+color: #1D1F22;
+`
+
+export const AttributeName = styled.div`
+width: 250px;
+height: 18px;
+margin-top:15px;
+font-family: 'Roboto Condensed';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 18px;
+display: flex;
+align-items: center;
+text-align: center;
+color: #1D1F22;
 `
 
 export const Attribute = styled.div`
-  text-transform:uppercase;
-  font-weight: 600;
-padding-top:10px;
-font-size:12px;
-font-family:"Roboto Condensed";
+width: 50px;
+height: 18px;
+margin-top: 15px;
+font-family: 'Roboto Condensed';
+font-style: normal;
+font-weight: 700;
+font-size: 18px;
+line-height: 18px;
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #1D1F22;
 
 `
 
 export const AttributeSwatch = styled.div.attrs((props: {color: string}) => props)`
-height: 20px;
-width: 20px;
 border: 1px solid black;
 cursor: pointer;
   display:flex;
 justify-content: center;
 align-items:center;
+margin-top: 15px;
+width: 63px;
+height: 45px;
 background-color: ${(props) => props.color};
 `
 export const AttributeStyle = styled.div`
@@ -102,27 +150,29 @@ export const AttributeButton = styled.div`
   height: 30px;
   width: 52px;
   border: 1px solid black;
-  textAlign: center;
+  text-align: center;
   justify-content: center;
   cursor:pointer;
+margin-top: 5px;
   display:flex;
-justify-content: center;
 align-items:center;
+left: 929px;
+top: 560px;
   &:hover{
     background-color:#000;
     color:white;
   };
 `
 export const AddButton = styled.button`
-width: 20rem;
-height: 35px;
-color: #fff;
 background-color: #5ECE7B;
+color: #fff;
 border: none;
-textAlign: center;
 cursor: pointer;
+text-align: center;
 margin-top:20px;
 margin-bottom:20px;
+width: 292px;
+height: 52px;
  &:hover{
   background-color:#0a430a;
 }

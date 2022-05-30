@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { getTotals } from "./redux/cartSlice";
 import { store } from "./redux/store";
+import "./styles/utils.css";
 
 const client = new ApolloClient({
   uri: "https://localhost:4000/",

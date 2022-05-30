@@ -1,4 +1,3 @@
-import { TopNavProps } from "./props";
 import { Product, TopNavTypes } from "./types";
 
 export const initialProduct: Product = {
@@ -43,4 +42,11 @@ export const initialNav:TopNavTypes = {
       currencySymbol: "",
       currencySwitchDisplay: false,
       cartOverlayDisplay: false,
+}
+
+export const initialDetails = {
+  product: { ...initialProduct },
+  imagePreview: "",
+  attributes: {},
+  attributesLength: 0,
 }

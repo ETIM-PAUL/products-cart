@@ -26,21 +26,23 @@ color:#5ECE7B;
 `
 
 export const Item = styled.div`
-font-size: 16px;
 color: black;
-height: 30px;
-text-align: center;
 &:hover ${HorizontalLine} {
   display:block;
 }
 &:hover {
   color:#5ECE7B;
 }
-cursor:pointer;
+height: 20px;
+font-family: 'Raleway';
 font-style: normal;
-// font-weight: 200;
-text-decoration: none;
+font-weight: 600;
+font-size: 16px;
+line-height: 120%;
+align-items: center;
+text-align: center;
 text-transform: uppercase;
+
 `
 
 export const Green = styled(Item)`

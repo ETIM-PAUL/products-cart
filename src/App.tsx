@@ -4,7 +4,7 @@ import TopNav from "./components/TopNav";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 import ProductDetails from "./components/Product-Details";
-import Cart from "./components/Cart/Cart";
+import Cart from "./components/Cart/Index";
 
 export const client = new ApolloClient({
   uri: "http://localhost:4000/",

@@ -18,7 +18,7 @@ import { CardPropsTypes } from "../../types";
 import cart from "../../img/cart.svg";
 import { Link } from "react-router-dom";
 import { Get_ProductList } from "../../queries";
-import { addToCart, getTotals } from "../../redux/cartSlice";
+import { mapDispatchToProps, mapStateToProps } from "./utils";
 
 class ProductsListing extends React.Component<
   { category: string; currency: string; addToCart: any; getTotals: any },
@@ -46,7 +46,6 @@ class ProductsListing extends React.Component<
       });
     }
     predefinedAttributes();
-    console.log(product);
     this.props.addToCart({ product, attribute });
     this.props.getTotals();
   }
@@ -132,20 +131,6 @@ class ProductsListing extends React.Component<
       </FirstContainer>
     );
   }
-}
-
-export function mapStateToProps(state: any) {
-  return {
-    category: state.selection["selectedCategory"],
-    currency: state.selection["selectedCurrency"],
-  };
-}
-
-function mapDispatchToProps(dispatch: any) {
-  return {
-    addToCart: (product: any) => dispatch(addToCart(product)),
-    getTotals: () => dispatch(getTotals()),
-  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductsListing);

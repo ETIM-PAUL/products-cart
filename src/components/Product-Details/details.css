@@ -1,18 +1,19 @@
-.selected{
+.selected {
   height: 30px;
   background-color: #000;
   width: 52px;
   border: 1px solid black;
   text-align: center;
   justify-content: center;
-  cursor:pointer;
-  display:flex;
-  color:white;
-justify-content: center;
-align-items:center;
+  cursor: pointer;
+  display: flex;
+  color: white;
+  justify-content: center;
+  align-items: center;
 }
 
-.swatchSelected{
+.swatchSelected {
   outline: 2px solid black;
-  };
+}
 
+;

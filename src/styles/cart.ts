@@ -91,6 +91,7 @@ height: 18px;
 width: 20px;
 border: 1px solid black;
 background-color: ${(props) => props.color};
+
 `
 export const CartItemIterator = styled.div`
 line-height: 55px;
@@ -139,4 +140,26 @@ display: grid;
 marginTop: 30px;
 line-height: 30px;
 `
+export const Container = styled.div`
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 16px;
+width: 279px;
+height: 159px;
+margin-top: 25px;
+margin-bottom: 25px;
+`
 
+export const TotalSection = styled.div`
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+padding: 0px;
+gap: 8px;
+width: 198px;
+flex: none;
+order: 0;
+flex-grow: 0;
+`

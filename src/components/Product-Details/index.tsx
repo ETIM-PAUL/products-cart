@@ -15,6 +15,7 @@ import {
   ProductParse,
   ImageHover,
   AttributeStyle,
+  AttributeName,
 } from "../../styles/productDetails";
 import { useParams } from "react-router";
 import DOMPurify from "dompurify";
@@ -22,7 +23,7 @@ import parse from "html-react-parser";
 import { ProductDetailsTypes } from "../../types";
 import { Get_Product } from "../../queries";
 import { connect } from "react-redux";
-import { initialProduct } from "../../initialState";
+import { initialDetails } from "../../initialState";
 import { NoStyleDiv } from "../../styles/cart";
 import { ProductDetailsProps } from "../../props";
 import "./details.css";
@@ -34,17 +35,11 @@ class ProductDetails extends React.Component<
 > {
   constructor(props: any) {
     super(props);
-    this.state = {
-      product: { ...initialProduct },
-      imagePreview: "",
-      attributes: {},
-      attributesLength: 0,
-    };
+    this.state = initialDetails;
   }
 
   addProductToCart(product: {}) {
     let attribute = this.state.attributes;
-    console.log(attribute);
     this.props.addToCart({ product, attribute });
     this.props.getTotals();
     this.predefinedAttributes();
@@ -104,9 +99,7 @@ class ProductDetails extends React.Component<
             <img
               src={this.state.imagePreview}
               alt="product-img-preview"
-              height={500}
-              width={600}
-              // style={{ width: "80px" }}
+              className="image"
             />
           </ProductImage>
 
@@ -118,7 +111,7 @@ class ProductDetails extends React.Component<
 
             {this.state.product.attributes.map((attr) => (
               <NoStyleDiv key={attr.id}>
-                <Attribute>{attr.name}:</Attribute>
+                <AttributeName>{attr.name}:</AttributeName>
                 <AttributeStyle>
                   {attr.type === "swatch" &&
                     attr.items.map((itm) => (

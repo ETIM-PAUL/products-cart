@@ -22,7 +22,7 @@ import {
 import { connect } from "react-redux";
 import { TopNavTypes } from "../../types";
 import { Get_Category, Get_Currency } from "../../queries";
-import CartOverlay from "../CartOverlay/CartOverlay";
+import CartOverlay from "../CartOverlay/Index";
 import logo from "../../img/alogo.png";
 import arrow from "../../img/arrowDown.png";
 import arrowUp from "../../img/arrowUp.png";
@@ -49,13 +49,11 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
       this.setState({ currencySwitchDisplay: false });
     }
   }
-
   handleClickOut(event) {
     if (this.ref2.current && !this.ref2.current.contains(event.target)) {
       this.setState({ cartOverlayDisplay: false });
     }
   }
-
   showCart() {
     if (this.state.cartOverlayDisplay === false) {
       this.setState({ cartOverlayDisplay: true });
@@ -70,16 +68,13 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
       this.setState({ currencySwitchDisplay: false });
     }
   }
-
   selectedCategoryTitle(title: string) {
     this.props.setCategory(title);
   }
-
   selectedCurrencyType(symbol: any) {
     this.props.setCurrency(symbol);
     this.props.setTotalPrice();
   }
-
   componentDidMount() {
     Get_Category().then((result) => {
       this.setState({
@@ -90,7 +85,6 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
         this.props.setCategory(this.state.category);
       }
     });
-
     Get_Currency().then((result) => {
       this.setState({
         currencies: result.data.currencies,
@@ -104,7 +98,6 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
     document.addEventListener("click", this.handleClickOut, true);
     document.body.style.margin = "0";
   }
-
   componentWillUnmount(): void {
     document.removeEventListener("click", this.handleClickOutside, true);
     document.removeEventListener("click", this.handleClickOut, true);
@@ -117,7 +110,7 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
           <Menu>
             {this.state.categories.length > 0 &&
               this.state.categories?.map((cat: any) => (
-                <Link to={"/"} style={{ textDecoration: "none" }}>
+                <Link to={"/"} className="links">
                   {this.props.category === cat.name ? (
                     <Green
                       id={cat.name}
@@ -136,18 +129,15 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
                       }
                     >
                       {cat.name}
-
                       <HorizontalLine />
                     </Item>
                   )}
                 </Link>
               ))}
           </Menu>
-
           <Logo>
             <img src={logo} alt="logo" />
           </Logo>
-
           <NoStyleDiv>
             <CartDiv ref={this.ref2}>
               <NoStyleDiv onClick={() => this.showCart()}>
@@ -164,7 +154,6 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
                 </Overlay>
               )}
             </CartDiv>
-
             <SingleIcon ref={this.ref}>
               <CurrencySwitcher onClick={() => this.showCurrency()}>
                 {this.props.currency}
@@ -174,7 +163,6 @@ class TopNav extends React.Component<TopNavProps, TopNavTypes> {
                   <Arrow src={arrow} alt="" />
                 )}
               </CurrencySwitcher>
-
               {this.state.currencySwitchDisplay && (
                 <CurrencyHolder>
                   {this.state.currencies?.map((cur: any) => (
